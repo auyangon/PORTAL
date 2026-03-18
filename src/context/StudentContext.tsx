@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type {
   Course,
   Schedule,
   Material,
   Quest,
   StudentQuest,
-  AppState,
-  Student
+  AppState
 } from '../types';
 import {
   fetchStudentByEmail,
@@ -58,18 +57,15 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
       
-      // Verify student exists
       const student = await fetchStudentByEmail(email);
       if (!student) {
         setState(prev => ({ ...prev, isLoading: false }));
         return false;
       }
       
-      // Store email and authenticate
       setStudentEmail(email);
       setIsAuthenticated(true);
       
-      // Fetch all data for this student
       await fetchAllData(email);
       return true;
     } catch (error) {
@@ -148,14 +144,12 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Initial fetch only if authenticated
   useEffect(() => {
     if (studentEmail && isAuthenticated) {
       fetchAllData(studentEmail);
     }
   }, [studentEmail, isAuthenticated, fetchAllData]);
 
-  // Polling refresh every 60 seconds (only if authenticated)
   useEffect(() => {
     if (!studentEmail || !isAuthenticated) return;
     
@@ -163,7 +157,6 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, [studentEmail, isAuthenticated, fetchAllData]);
 
-  // Helper functions (unchanged)
   const getEnrolledCourses = useCallback((): Course[] => {
     const enrolledCourseCodes = state.enrollments.map(e => e.courseCode);
     return state.courses.filter(c => enrolledCourseCodes.includes(c.courseCode));

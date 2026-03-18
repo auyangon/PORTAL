@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { HiOutlineMail, HiOutlineLock, HiOutlineAcademicCap } from 'react-icons/hi';
+import { HiOutlineMail, HiOutlineAcademicCap } from 'react-icons/hi';
 import { useStudent } from '../context/StudentContext';
 
 export function Login() {

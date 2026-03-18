@@ -1,164 +1,100 @@
-import { Variants } from 'framer-motion';
+﻿import { Variants } from 'framer-motion';
 
-// 🎭 SMOOTH EASING CURVES
-export const easing = [0.25, 0.1, 0.25, 1]; // Cubic bezier - super smooth
-
-// 🔥 CARD ANIMATIONS
-export const cardVariants: Variants = {
-  initial: { 
-    opacity: 0, 
-    y: 30,
-    scale: 0.95
-  },
-  animate: { 
-    opacity: 1, 
-    y: 0,
-    scale: 1,
+// 🎭 STAGGER CONTAINER
+export const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: easing
-    }
-  },
-  hover: { 
-    y: -8,
-    scale: 1.02,
-    transition: {
-      duration: 0.2,
-      ease: easing
-    }
-  },
-  tap: { 
-    scale: 0.98,
-    transition: {
-      duration: 0.1
+      staggerChildren: 0.08,
+      delayChildren: 0.1
     }
   }
 };
 
 // 📊 STAT CARD ANIMATIONS
 export const statCardVariants: Variants = {
-  initial: { 
+  hidden: { 
     opacity: 0, 
     scale: 0.9,
     y: 20
   },
-  animate: { 
+  visible: { 
     opacity: 1, 
     scale: 1,
     y: 0,
     transition: {
-      duration: 0.4,
-      ease: easing
-    }
-  },
-  hover: { 
-    y: -6,
-    scale: 1.01,
-    boxShadow: '0 20px 40px rgba(27, 95, 86, 0.15)',
-    transition: {
-      duration: 0.2,
-      ease: easing
+      duration: 0.4
     }
   }
 };
 
-// 📋 LIST ITEM ANIMATIONS
-export const listItemVariants: Variants = {
-  initial: { 
+// 📅 SCHEDULE ITEM ANIMATIONS
+export const scheduleItemVariants: Variants = {
+  hidden: { 
     opacity: 0, 
-    x: -20 
+    y: 15
   },
-  animate: { 
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.4
+    }
+  }
+};
+
+// 📋 QUEST ITEM ANIMATIONS
+export const questItemVariants: Variants = {
+  hidden: { 
+    opacity: 0, 
+    x: -10 
+  },
+  visible: { 
     opacity: 1, 
     x: 0,
     transition: {
-      duration: 0.3,
-      ease: easing
-    }
-  },
-  hover: { 
-    x: 4,
-    backgroundColor: 'rgba(45, 154, 138, 0.05)',
-    transition: {
-      duration: 0.2
-    }
-  }
-};
-
-// 🌀 STAGGERED CONTAINER
-export const staggerContainer: Variants = {
-  initial: { opacity: 0 },
-  animate: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.1,
-      ease: easing
+      duration: 0.3
     }
   }
 };
 
 // ✨ FADE IN UP
 export const fadeInUp: Variants = {
-  initial: { 
+  hidden: { 
     opacity: 0, 
     y: 30 
   },
-  animate: { 
+  visible: { 
     opacity: 1, 
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: easing
+      duration: 0.5
     }
   }
 };
 
-// 🎯 SCALE ON HOVER
-export const scaleHover = {
-  whileHover: { 
-    scale: 1.02,
-    transition: { duration: 0.2 }
-  },
-  whileTap: { 
-    scale: 0.98 
-  }
-};
-
-// 📅 SCHEDULE ITEM
-export const scheduleItemVariants: Variants = {
-  initial: { 
+// 🎯 PAGE TRANSITIONS
+export const pageVariants: Variants = {
+  hidden: { 
     opacity: 0, 
-    y: 15,
+    y: 20,
     scale: 0.98
   },
-  animate: { 
+  visible: { 
     opacity: 1, 
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.4,
-      ease: easing
+      duration: 0.4
     }
   },
-  hover: { 
-    y: -2,
-    scale: 1.01,
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    scale: 0.98,
     transition: {
-      duration: 0.2
-    }
-  }
-};
-
-// 🔔 ANNOUNCEMENT PULSE
-export const pulseVariants = {
-  initial: { scale: 1 },
-  animate: {
-    scale: [1, 1.02, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
+      duration: 0.3
     }
   }
 };
