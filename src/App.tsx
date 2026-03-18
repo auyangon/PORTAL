@@ -14,6 +14,7 @@ import { Schedule } from './components/Schedule/Schedule';
 import { Announcements } from './components/Announcements/Announcements';
 import { Requests } from './components/Requests/Requests';
 import { LoadingScreen } from './components/UI/LoadingScreen';
+import { pageVariants } from './utils/animations';
 import type { NavigationPage } from './types';
 
 const PAGE_TITLES: Record<NavigationPage, string> = {
@@ -38,7 +39,6 @@ function AppContent() {
     }
   }, [isLoading]);
 
-  // If no student is logged in, show login page
   if (!currentStudent) {
     return <Login />;
   }
@@ -79,10 +79,11 @@ function AppContent() {
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.2 }}
+              variants={pageVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="w-full"
             >
               {renderPage()}
             </motion.div>

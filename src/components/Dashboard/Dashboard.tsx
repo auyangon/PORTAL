@@ -9,19 +9,13 @@ import {
   HiOutlineLightningBolt,
 } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1 },
-};
+import { 
+  staggerContainer, 
+  statCardVariants, 
+  scheduleItemVariants, 
+  questItemVariants,
+  fadeInUp 
+} from '../../utils/animations';
 
 export function Dashboard() {
   const {
@@ -63,7 +57,7 @@ export function Dashboard() {
 
   return (
     <motion.div
-      variants={containerVariants}
+      variants={staggerContainer}
       initial="hidden"
       animate="visible"
       className="space-y-8"
@@ -72,8 +66,9 @@ export function Dashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* GPA Card */}
         <motion.div
-          variants={itemVariants}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover-lift"
+          variants={statCardVariants}
+          whileHover="hover"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -100,8 +95,9 @@ export function Dashboard() {
 
         {/* Courses Card */}
         <motion.div
-          variants={itemVariants}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover-lift"
+          variants={statCardVariants}
+          whileHover="hover"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -130,8 +126,9 @@ export function Dashboard() {
 
         {/* Attendance Card */}
         <motion.div
-          variants={itemVariants}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover-lift"
+          variants={statCardVariants}
+          whileHover="hover"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -161,8 +158,9 @@ export function Dashboard() {
 
         {/* Quests Card */}
         <motion.div
-          variants={itemVariants}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl hover-lift"
+          variants={statCardVariants}
+          whileHover="hover"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -192,7 +190,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule */}
         <motion.div
-          variants={itemVariants}
+          variants={fadeInUp}
           className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
@@ -211,7 +209,8 @@ export function Dashboard() {
                 return (
                   <motion.div
                     key={schedule.scheduleId}
-                    whileHover={{ scale: 1.01 }}
+                    variants={scheduleItemVariants}
+                    whileHover="hover"
                     className="flex items-center gap-4 p-4 rounded-2xl"
                     style={{ 
                       background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
@@ -245,7 +244,7 @@ export function Dashboard() {
 
         {/* Upcoming Quests */}
         <motion.div
-          variants={itemVariants}
+          variants={fadeInUp}
           className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
@@ -264,7 +263,8 @@ export function Dashboard() {
               return (
                 <motion.div
                   key={quest.questId}
-                  whileHover={{ scale: 1.02 }}
+                  variants={questItemVariants}
+                  whileHover="hover"
                   className="p-4 rounded-2xl"
                   style={{ 
                     background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
@@ -318,7 +318,7 @@ export function Dashboard() {
 
       {/* Quick Stats Row */}
       <motion.div
-        variants={itemVariants}
+        variants={fadeInUp}
         className="rounded-3xl p-8 text-white relative overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)',
