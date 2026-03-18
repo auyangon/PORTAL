@@ -8,13 +8,14 @@ type SheetName = keyof typeof SHEET_NAMES;
 
 async function fetchSheet<T>(sheet: SheetName): Promise<T[]> {
   try {
-    const url = ${CONFIG.API_BASE_URL}?sheet=;
+    const url = CONFIG.API_BASE_URL + '?sheet=' + SHEET_NAMES[sheet];
+    console.log('Fetching:', url);
     const response = await fetch(url);
-    if (!response.ok) throw new Error(HTTP );
+    if (!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
     return data as T[];
   } catch (error) {
-    console.error(Failed to fetch :, error);
+    console.error('Failed to fetch ' + sheet + ':', error);
     return [];
   }
 }
