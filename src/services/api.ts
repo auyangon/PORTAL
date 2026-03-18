@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Student, Course, Enrollment, Schedule, Material, 
   Announcement, Attendance, Quest, StudentQuest, Request
 } from '../types';
