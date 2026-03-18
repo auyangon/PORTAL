@@ -9,6 +9,7 @@ type SheetName = keyof typeof SHEET_NAMES;
 async function fetchSheet<T>(sheet: SheetName): Promise<T[]> {
   try {
     const url = CONFIG.API_BASE_URL + '?sheet=' + SHEET_NAMES[sheet];
+    console.log('Fetching:', url);
     const response = await fetch(url);
     if (!response.ok) throw new Error('HTTP ' + response.status);
     const data = await response.json();
@@ -32,7 +33,25 @@ export const fetchEnrollmentsByEmail = async (email: string) => {
 };
 export const fetchSchedules = () => fetchSheet<Schedule>('Schedule');
 export const fetchMaterials = () => fetchSheet<Material>('Materials');
-export const fetchAnnouncements = () => fetchSheet<Announcement>('Announcements');
+
+// ✅ UPDATED ANNOUNCEMENTS FUNCTION WITH DEBUG LOGGING
+export const fetchAnnouncements = async () => {
+  try {
+    const data = await fetchSheet<Announcement>('Announcements');
+    console.log('📢 ANNOUNCEMENTS RAW:', data);
+    console.log('📢 COUNT:', data.length);
+    if (data.length > 0) {
+      console.log('📢 FIRST ANNOUNCEMENT:', data[0]);
+    } else {
+      console.warn('⚠️ NO ANNOUNCEMENTS FOUND - Check your sheet');
+    }
+    return data;
+  } catch (error) {
+    console.error('❌ Failed to fetch announcements:', error);
+    return [];
+  }
+};
+
 export const fetchAttendance = () => fetchSheet<Attendance>('Attendance');
 export const fetchAttendanceByEmail = async (email: string) => {
   const attendance = await fetchAttendance();
