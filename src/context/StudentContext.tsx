@@ -6,6 +6,7 @@ import type {
   Quest,
   StudentQuest,
   AppState,
+  Student
 } from '../types';
 import {
   fetchStudentByEmail,
@@ -23,7 +24,8 @@ import {
 
 interface StudentContextType extends AppState {
   refreshData: () => Promise<void>;
-  setStudentEmail: (email: string) => void;
+  login: (email: string) => Promise<boolean>;
+  logout: () => void;
   getEnrolledCourses: () => Course[];
   getStudentSchedules: () => Schedule[];
   getCourseMaterials: (courseCode: string) => Material[];
@@ -33,11 +35,9 @@ interface StudentContextType extends AppState {
 
 const StudentContext = createContext<StudentContextType | null>(null);
 
-// Demo student email
-const DEFAULT_STUDENT_EMAIL = 'john.doe@auy.edu.mm';
-
 export function StudentProvider({ children }: { children: React.ReactNode }) {
-  const [studentEmail, setStudentEmail] = useState<string>(DEFAULT_STUDENT_EMAIL);
+  const [studentEmail, setStudentEmail] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [state, setState] = useState<AppState>({
     currentStudent: null,
     enrollments: [],
@@ -53,7 +53,51 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     error: null,
   });
 
-  const fetchAllData = useCallback(async () => {
+  // Login function
+  const login = async (email: string): Promise<boolean> => {
+    try {
+      setState(prev => ({ ...prev, isLoading: true }));
+      
+      // Verify student exists
+      const student = await fetchStudentByEmail(email);
+      if (!student) {
+        setState(prev => ({ ...prev, isLoading: false }));
+        return false;
+      }
+      
+      // Store email and authenticate
+      setStudentEmail(email);
+      setIsAuthenticated(true);
+      
+      // Fetch all data for this student
+      await fetchAllData(email);
+      return true;
+    } catch (error) {
+      setState(prev => ({ ...prev, isLoading: false, error: 'Login failed' }));
+      return false;
+    }
+  };
+
+  const logout = () => {
+    setStudentEmail(null);
+    setIsAuthenticated(false);
+    setState({
+      currentStudent: null,
+      enrollments: [],
+      courses: [],
+      schedules: [],
+      materials: [],
+      announcements: [],
+      attendance: [],
+      quests: [],
+      studentQuests: [],
+      requests: [],
+      isLoading: false,
+      error: null,
+    });
+  };
+
+  const fetchAllData = useCallback(async (email: string) => {
     try {
       setState(prev => ({ ...prev, isLoading: true, error: null }));
 
@@ -69,16 +113,16 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         studentQuests,
         requests,
       ] = await Promise.all([
-        fetchStudentByEmail(studentEmail),
+        fetchStudentByEmail(email),
         fetchCourses(),
-        fetchEnrollmentsByEmail(studentEmail),
+        fetchEnrollmentsByEmail(email),
         fetchSchedules(),
         fetchMaterials(),
         fetchAnnouncements(),
-        fetchAttendanceByEmail(studentEmail),
+        fetchAttendanceByEmail(email),
         fetchQuests(),
-        fetchStudentQuestsByEmail(studentEmail),
-        fetchRequestsByEmail(studentEmail),
+        fetchStudentQuestsByEmail(email),
+        fetchRequestsByEmail(email),
       ]);
 
       setState({
@@ -102,20 +146,24 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         error: error instanceof Error ? error.message : 'Failed to fetch data',
       }));
     }
-  }, [studentEmail]);
+  }, []);
 
-  // Initial fetch
+  // Initial fetch only if authenticated
   useEffect(() => {
-    fetchAllData();
-  }, [fetchAllData]);
+    if (studentEmail && isAuthenticated) {
+      fetchAllData(studentEmail);
+    }
+  }, [studentEmail, isAuthenticated, fetchAllData]);
 
-  // Polling refresh every 60 seconds
+  // Polling refresh every 60 seconds (only if authenticated)
   useEffect(() => {
-    const interval = setInterval(fetchAllData, REFRESH_INTERVAL);
+    if (!studentEmail || !isAuthenticated) return;
+    
+    const interval = setInterval(() => fetchAllData(studentEmail), REFRESH_INTERVAL);
     return () => clearInterval(interval);
-  }, [fetchAllData]);
+  }, [studentEmail, isAuthenticated, fetchAllData]);
 
-  // Helper functions
+  // Helper functions (unchanged)
   const getEnrolledCourses = useCallback((): Course[] => {
     const enrolledCourseCodes = state.enrollments.map(e => e.courseCode);
     return state.courses.filter(c => enrolledCourseCodes.includes(c.courseCode));
@@ -143,8 +191,9 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
 
   const value: StudentContextType = {
     ...state,
-    refreshData: fetchAllData,
-    setStudentEmail,
+    login,
+    logout,
+    refreshData: () => studentEmail ? fetchAllData(studentEmail) : Promise.resolve(),
     getEnrolledCourses,
     getStudentSchedules,
     getCourseMaterials,

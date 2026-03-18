@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 
 import { StudentProvider, useStudent } from './context/StudentContext';
+import { Login } from './components/Login';
 import Sidebar from './components/Layout/Sidebar';
 import { Topbar } from './components/Layout/Topbar';
 import { Dashboard } from './components/Dashboard/Dashboard';
@@ -27,7 +28,7 @@ const PAGE_TITLES: Record<NavigationPage, string> = {
 
 function AppContent() {
   const [currentPage, setCurrentPage] = useState<NavigationPage>('dashboard');
-  const { isLoading } = useStudent();
+  const { currentStudent, isLoading } = useStudent();
   const [showLoading, setShowLoading] = useState(true);
 
   useEffect(() => {
@@ -36,6 +37,11 @@ function AppContent() {
       return () => clearTimeout(timer);
     }
   }, [isLoading]);
+
+  // If no student is logged in, show login page
+  if (!currentStudent) {
+    return <Login />;
+  }
 
   const renderPage = () => {
     switch (currentPage) {
@@ -64,15 +70,11 @@ function AppContent() {
 
   return (
     <div className="min-h-screen">
-      {/* Sidebar */}
       <Sidebar activeTab={currentPage} setActiveTab={(tab) => setCurrentPage(tab as NavigationPage)} />
-
-      {/* Main Content */}
+      
       <div className="ml-72">
-        {/* Topbar */}
         <Topbar title={PAGE_TITLES[currentPage]} />
-
-        {/* Page Content */}
+        
         <main className="pt-28 px-8 pb-8">
           <AnimatePresence mode="wait">
             <motion.div
@@ -88,7 +90,6 @@ function AppContent() {
         </main>
       </div>
 
-      {/* Toast Notifications */}
       <Toaster
         position="bottom-right"
         toastOptions={{
@@ -98,13 +99,6 @@ function AppContent() {
             borderRadius: '16px',
             padding: '16px',
             fontFamily: 'Poppins, sans-serif',
-            border: '1px solid rgba(102, 195, 183, 0.2)',
-          },
-          success: {
-            iconTheme: {
-              primary: '#66c3b7',
-              secondary: '#fff',
-            },
           },
         }}
       />
