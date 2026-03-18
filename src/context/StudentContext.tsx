@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type {
   Course,
   Schedule,
@@ -20,16 +20,20 @@ import {
   fetchRequestsByEmail,
   REFRESH_INTERVAL,
 } from '../services/api';
+import { createWixClient, isWixAuthenticated, logoutFromWix } from '../services/wixAuth';
+import Cookies from 'js-cookie';
 
 interface StudentContextType extends AppState {
   refreshData: () => Promise<void>;
-  login: (email: string) => Promise<boolean>;
-  logout: () => void;
+  loginWithWix: () => Promise<void>;
+  handleWixCallback: () => Promise<boolean>;
+  logout: () => Promise<void>;
   getEnrolledCourses: () => Course[];
   getStudentSchedules: () => Schedule[];
   getCourseMaterials: (courseCode: string) => Material[];
   getCourseByCode: (courseCode: string) => Course | undefined;
   getQuestWithStudentData: (questId: string) => { quest: Quest; studentQuest: StudentQuest | undefined } | undefined;
+  isWixAuthenticated: boolean;
 }
 
 const StudentContext = createContext<StudentContextType | null>(null);
@@ -37,6 +41,7 @@ const StudentContext = createContext<StudentContextType | null>(null);
 export function StudentProvider({ children }: { children: React.ReactNode }) {
   const [studentEmail, setStudentEmail] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [wixAuth, setWixAuth] = useState(false);
   const [state, setState] = useState<AppState>({
     currentStudent: null,
     enrollments: [],
@@ -52,8 +57,91 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     error: null,
   });
 
-  // Login function
-  const login = async (email: string): Promise<boolean> => {
+  // Check Wix auth status on mount
+  useEffect(() => {
+    const checkWixAuth = async () => {
+      const authenticated = await isWixAuthenticated();
+      setWixAuth(authenticated);
+      
+      // If authenticated with Wix, try to restore session
+      if (authenticated) {
+        const wixClient = createWixClient();
+        try {
+          const { member } = await wixClient.members.getCurrentMember();
+          if (member?.loginEmail) {
+            await loginWithEmail(member.loginEmail);
+          }
+        } catch (error) {
+          console.error('Failed to restore Wix session:', error);
+        }
+      }
+    };
+    
+    checkWixAuth();
+  }, []);
+
+  // Login with Wix - redirects to Wix login page
+  const loginWithWix = async () => {
+    try {
+      const wixClient = createWixClient();
+      
+      // Generate OAuth data
+      const redirectData = wixClient.auth.generateOAuthData(
+        `${window.location.origin}/login-callback`,
+        window.location.href
+      );
+      
+      // Store for callback
+      localStorage.setItem('wixOAuthData', JSON.stringify(redirectData));
+      
+      // Get Wix login URL and redirect
+      const { authUrl } = await wixClient.auth.getAuthUrl(redirectData);
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Wix login failed:', error);
+      setState(prev => ({ ...prev, error: 'Failed to initialize login' }));
+    }
+  };
+
+  // Handle Wix callback after login
+  const handleWixCallback = async (): Promise<boolean> => {
+    try {
+      const wixClient = createWixClient();
+      const savedData = JSON.parse(localStorage.getItem('wixOAuthData') || 'null');
+      
+      if (!savedData) {
+        throw new Error('No OAuth data found');
+      }
+      
+      // Exchange code for tokens
+      const { code } = wixClient.auth.parseFromUrl();
+      const tokens = await wixClient.auth.getMemberTokens(code, savedData);
+      
+      // Store tokens in cookies
+      Cookies.set('wixSession', JSON.stringify(tokens), { expires: 7 });
+      localStorage.removeItem('wixOAuthData');
+      
+      // Get member info
+      const { member } = await wixClient.members.getCurrentMember();
+      
+      if (member?.loginEmail) {
+        // Login with the email from Wix
+        const success = await loginWithEmail(member.loginEmail);
+        if (success) {
+          setWixAuth(true);
+          return true;
+        }
+      }
+      
+      return false;
+    } catch (error) {
+      console.error('Wix callback failed:', error);
+      return false;
+    }
+  };
+
+  // Core email login function (used by both Wix and direct login)
+  const loginWithEmail = async (email: string): Promise<boolean> => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
       
@@ -74,9 +162,17 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
+  // Logout from both systems
+  const logout = async () => {
+    // Logout from Wix
+    await logoutFromWix();
+    
+    // Clear local state
     setStudentEmail(null);
     setIsAuthenticated(false);
+    setWixAuth(false);
+    Cookies.remove('wixSession');
+    
     setState({
       currentStudent: null,
       enrollments: [],
@@ -91,6 +187,9 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
       isLoading: false,
       error: null,
     });
+    
+    // Redirect to home
+    window.location.href = '/';
   };
 
   const fetchAllData = useCallback(async (email: string) => {
@@ -184,7 +283,8 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
 
   const value: StudentContextType = {
     ...state,
-    login,
+    loginWithWix,
+    handleWixCallback,
     logout,
     refreshData: () => studentEmail ? fetchAllData(studentEmail) : Promise.resolve(),
     getEnrolledCourses,
@@ -192,6 +292,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     getCourseMaterials,
     getCourseByCode,
     getQuestWithStudentData,
+    isWixAuthenticated: wixAuth,
   };
 
   return (
