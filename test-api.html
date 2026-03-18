@@ -1,0 +1,17 @@
+﻿<!DOCTYPE html>
+<html>
+<head><title>API Test</title></head>
+<body>
+<h2>Testing AUY Apps Script API</h2>
+<div id="result"></div>
+<script>
+fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec?sheet=Students')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('result').innerHTML = 
+      '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+  })
+  .catch(e => document.getElementById('result').innerHTML = 'Error: ' + e);
+</script>
+</body>
+</html>
