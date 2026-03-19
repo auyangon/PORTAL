@@ -9,11 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@wix/members": "^1.0.434",
-    "@wix/sdk": "^1.21.5",
+    "@react-oauth/google": "^0.13.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
-    "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hot-toast": "^2.6.0",
@@ -22,7 +21,6 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.17",
-    "@types/js-cookie": "^3.0.6",
     "@types/node": "^22.0.0",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
