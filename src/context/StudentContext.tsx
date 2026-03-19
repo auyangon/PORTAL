@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type {
   Course,
   Schedule,
@@ -21,7 +21,7 @@ import {
   REFRESH_INTERVAL,
 } from '../services/api';
 import { createWixClient, isWixAuthenticated, logoutFromWix } from '../services/wixAuth';
-import Cookies from 'js-cookie';
+
 
 interface StudentContextType extends AppState {
   refreshData: () => Promise<void>;
@@ -118,7 +118,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
       const tokens = await wixClient.auth.getMemberTokens(code, savedData);
       
       // Store tokens in cookies
-      Cookies.set('wixSession', JSON.stringify(tokens), { expires: 7 });
+      
       localStorage.removeItem('wixOAuthData');
       
       // Get member info
@@ -171,7 +171,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     setStudentEmail(null);
     setIsAuthenticated(false);
     setWixAuth(false);
-    Cookies.remove('wixSession');
+    
     
     setState({
       currentStudent: null,
