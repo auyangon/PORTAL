@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { HiOutlineMail, HiOutlineAcademicCap } from 'react-icons/hi';
 import { useStudent } from '../context/StudentContext';
+import { WixLoginButton } from './WixLoginButton';
 
 export function Login() {
   const [email, setEmail] = useState('');
@@ -83,6 +84,19 @@ export function Login() {
               {isLoading ? 'Logging in...' : 'Continue to Portal'}
             </button>
           </form>
+
+          {/* Divider */}
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t" style={{ borderColor: '#e2e8f0' }}></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white" style={{ color: '#66c3b7' }}>Or continue with</span>
+            </div>
+          </div>
+
+          {/* Wix Login Button */}
+          <WixLoginButton />
 
           <div className="mt-6 text-center">
             <p className="text-sm" style={{ color: '#66c3b7' }}>
