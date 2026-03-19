@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import {
+﻿import { HiOutlineClock,  motion } from 'framer-motion';
+import { HiOutlineClock, 
   HiOutlineAcademicCap,
   HiOutlineBookOpen,
   HiOutlineClipboardCheck,
@@ -8,8 +8,8 @@ import {
   HiOutlineChartBar,
   HiOutlineLightningBolt,
 } from 'react-icons/hi';
-import { useStudent } from '../../context/StudentContext';
-import { 
+import { HiOutlineClock,  useStudent } from '../../context/StudentContext';
+import { HiOutlineClock,  
   staggerContainer, 
   statCardVariants, 
   scheduleItemVariants, 
@@ -56,22 +56,50 @@ export function Dashboard() {
     .slice(0, 3);
 
   return (
-    <motion.div
-      variants={staggerContainer}
-      initial="hidden"
-      animate="visible"
-      className="space-y-8"
-    >
-      {/* Stats Cards */}
+    
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div>{/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* GPA Card */}
-        <motion.div
-          variants={statCardVariants}
-          whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-start justify-between mb-4">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-start justify-between mb-4">
             <div 
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
@@ -94,13 +122,27 @@ export function Dashboard() {
         </motion.div>
 
         {/* Courses Card */}
-        <motion.div
-          variants={statCardVariants}
-          whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-start justify-between mb-4">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-start justify-between mb-4">
             <div 
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
@@ -125,13 +167,27 @@ export function Dashboard() {
         </motion.div>
 
         {/* Attendance Card */}
-        <motion.div
-          variants={statCardVariants}
-          whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-start justify-between mb-4">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-start justify-between mb-4">
             <div 
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
@@ -157,13 +213,27 @@ export function Dashboard() {
         </motion.div>
 
         {/* Quests Card */}
-        <motion.div
-          variants={statCardVariants}
-          whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-start justify-between mb-4">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-start justify-between mb-4">
             <div 
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
@@ -189,12 +259,27 @@ export function Dashboard() {
       {/* Second Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Today's Schedule */}
-        <motion.div
-          variants={fadeInUp}
-          className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-center justify-between mb-6">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-lg font-semibold" style={{ color: '#0d312c' }}>Today's Schedule</h3>
               <p className="text-sm" style={{ color: '#247d70' }}>{today}</p>
@@ -207,17 +292,27 @@ export function Dashboard() {
               {todaySchedules.map((schedule) => {
                 const course = getCourseByCode(schedule.courseCode);
                 return (
-                  <motion.div
-                    key={schedule.scheduleId}
-                    variants={scheduleItemVariants}
-                    whileHover="hover"
-                    className="flex items-center gap-4 p-4 rounded-2xl"
-                    style={{ 
-                      background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
-                      border: '1px solid rgba(45, 154, 138, 0.1)',
-                    }}
-                  >
-                    <div 
+                  
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div 
                       className="w-1 h-14 rounded-full"
                       style={{ background: 'linear-gradient(180deg, #1b5f56 0%, #2d9a8a 100%)' }}
                     />
@@ -243,12 +338,27 @@ export function Dashboard() {
         </motion.div>
 
         {/* Upcoming Quests */}
-        <motion.div
-          variants={fadeInUp}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
-          style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-        >
-          <div className="flex items-center justify-between mb-6">
+        
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-center justify-between mb-6">
             <h3 className="text-lg font-semibold" style={{ color: '#0d312c' }}>Upcoming Quests</h3>
             <HiOutlineClipboardList size={24} style={{ color: '#66c3b7' }} />
           </div>
@@ -261,17 +371,27 @@ export function Dashboard() {
               const isOverdue = dueDate < new Date();
 
               return (
-                <motion.div
-                  key={quest.questId}
-                  variants={questItemVariants}
-                  whileHover="hover"
-                  className="p-4 rounded-2xl"
-                  style={{ 
-                    background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
-                    border: '1px solid rgba(45, 154, 138, 0.1)',
-                  }}
-                >
-                  <div className="flex items-start justify-between mb-2">
+                
+      {/* Live Clock Banner */}
+      <motion.div
+        variants={fadeInUp}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
+      >
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div><div className="flex items-start justify-between mb-2">
                     <span 
                       className="text-xs font-medium px-2 py-1 rounded-lg"
                       style={{
@@ -317,14 +437,27 @@ export function Dashboard() {
       </div>
 
       {/* Quick Stats Row */}
+      
+      {/* Live Clock Banner */}
       <motion.div
         variants={fadeInUp}
-        className="rounded-3xl p-8 text-white relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(135deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)',
-        }}
+        className="glass-card p-6 mb-6 flex items-center justify-between"
       >
-        {/* Decorative elements */}
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineClock size={24} className="text-white" />
+          </div>
+          <div>
+            <p className="text-sm" style={{ color: '#247d70' }}>Current Time</p>
+            <p className="text-2xl font-semibold" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</p>
+          </div>
+        </div>
+        <div className="text-right">
+          <p className="text-sm" style={{ color: '#247d70' }}>{formatDate(currentTime)}</p>
+          <p className="text-xs" style={{ color: '#66c3b7' }}>Live updating</p>
+        </div>
+      </motion.div>{/* Decorative elements */}
         <div className="absolute inset-0 pointer-events-none">
           <div 
             className="absolute -top-24 -right-24 w-48 h-48 rounded-full opacity-20"
@@ -340,7 +473,7 @@ export function Dashboard() {
           <div>
             <p className="text-white/60 text-sm mb-1">Student Information</p>
             <h3 className="text-xl font-semibold">{currentStudent?.studentName}</h3>
-            <p className="text-white/60 text-sm mt-1">{currentStudent?.studentId} • {currentStudent?.major}</p>
+            <p className="text-white/60 text-sm mt-1">{currentStudent?.studentId} â€¢ {currentStudent?.major}</p>
           </div>
           <div className="flex gap-8 flex-wrap">
             <div className="text-center">
