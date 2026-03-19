@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { StudentProvider, useStudent } from './context/StudentContext';
-import { Login } from './components/Login';
+import { Login } from './components/Login';  // This is now Google Login
 import Sidebar from './components/Layout/Sidebar';
 import { Topbar } from './components/Layout/Topbar';
 import { Dashboard } from './components/Dashboard/Dashboard';
@@ -16,6 +17,8 @@ import { Requests } from './components/Requests/Requests';
 import { LoadingScreen } from './components/UI/LoadingScreen';
 import { pageVariants } from './utils/animations';
 import type { NavigationPage } from './types';
+
+const GOOGLE_CLIENT_ID = '316467644383-78ueu8svimuqvshpplpeg0vs3d5ro49r.apps.googleusercontent.com';
 
 const PAGE_TITLES: Record<NavigationPage, string> = {
   dashboard: 'Dashboard',
@@ -109,8 +112,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <StudentProvider>
-      <AppContent />
-    </StudentProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <StudentProvider>
+        <AppContent />
+      </StudentProvider>
+    </GoogleOAuthProvider>
   );
 }
