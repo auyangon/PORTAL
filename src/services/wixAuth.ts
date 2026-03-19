@@ -17,8 +17,11 @@ export const createWixClient = () => {
 export const loginWithWix = async () => {
   const wixClient = createWixClient();
   
+  // FIXED: Use string concatenation instead of template literals
+  const redirectUri = window.location.origin + '/login-callback';
+  
   const redirectData = wixClient.auth.generateOAuthData(
-    ${window.location.origin}/login-callback,
+    redirectUri,
     window.location.href
   );
   
