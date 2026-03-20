@@ -120,7 +120,7 @@ function AppContent() {
       )}
 
       {/* Sidebar */}
-      <div className={isMobile ? ixed inset-0 z-40 transition-transform duration-300  : ''}>
+      <div className={isMobile ? 'fixed inset-0 z-40 transition-transform duration-300 ' + (sidebarOpen ? 'translate-x-0' : '-translate-x-full') : ''}>
         <Sidebar 
           activeTab={currentPage} 
           setActiveTab={(tab) => setCurrentPage(tab as NavigationPage)}
