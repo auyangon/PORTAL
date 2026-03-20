@@ -6,21 +6,16 @@
   studentId: string;
 }
 
-// Admin email to receive notifications
 const ADMIN_EMAIL = 'admin@auy.edu.mm';
-
-// Google Apps Script Web App URL for sending emails
 const EMAIL_WEB_APP_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 export const submitRequest = async (requestData: RequestData) => {
   try {
-    // 1. First, save to your Google Sheets (via your existing API)
-    const saveToSheet = await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec', {
+    // Save to Google Sheets
+    await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec', {
       method: 'POST',
       mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sheet: 'Requests',
         data: {
@@ -34,26 +29,24 @@ export const submitRequest = async (requestData: RequestData) => {
       })
     });
 
-    // 2. Send email notification to admin
-    const emailResponse = await fetch(EMAIL_WEB_APP_URL, {
+    // Send email notification (using string concatenation, not template literals)
+    const emailBody = 
+      '<h2>New Student Request</h2>' +
+      '<p><strong>Student:</strong> ' + requestData.studentName + ' (' + requestData.studentId + ')</p>' +
+      '<p><strong>Email:</strong> ' + requestData.studentEmail + '</p>' +
+      '<p><strong>Request Type:</strong> ' + requestData.type + '</p>' +
+      '<p><strong>Details:</strong> ' + requestData.details + '</p>' +
+      '<p><strong>Submitted:</strong> ' + new Date().toLocaleString() + '</p>' +
+      '<hr><p>Please log in to the admin portal to process this request.</p>';
+
+    await fetch(EMAIL_WEB_APP_URL, {
       method: 'POST',
       mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         to: ADMIN_EMAIL,
-        subject: New Request from ,
-        body: 
-          <h2>New Student Request</h2>
-          <p><strong>Student:</strong>  ()</p>
-          <p><strong>Email:</strong> </p>
-          <p><strong>Request Type:</strong> </p>
-          <p><strong>Details:</strong> </p>
-          <p><strong>Submitted:</strong> </p>
-          <hr>
-          <p>Please log in to the admin portal to process this request.</p>
-        
+        subject: 'New Request from ' + requestData.studentName,
+        body: emailBody
       })
     });
 
@@ -77,12 +70,10 @@ export const getAllRequests = async () => {
 
 export const updateRequestStatus = async (requestId: string, status: string, adminNote: string) => {
   try {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec', {
+    await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec', {
       method: 'PUT',
       mode: 'no-cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         sheet: 'Requests',
         requestId: requestId,
