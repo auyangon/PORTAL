@@ -7,8 +7,7 @@ import {
   HiOutlineClipboardList,
   HiOutlineClock,
   HiOutlineChartBar,
-  HiOutlineLightningBolt,
-, HiOutlineLink } from 'react-icons/hi';
+  HiOutlineLightningBolt, HiOutlineLink } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 import { 
   staggerContainer, 
@@ -27,8 +26,7 @@ export function Dashboard() {
     quests,
     getEnrolledCourses,
     getStudentSchedules,
-    getCourseByCode,
-  } = useStudent();
+    getCourseByCode} = useStudent();
 
   // Live clock
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -121,8 +119,7 @@ export function Dashboard() {
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
                 background: 'linear-gradient(135deg, #1b5f56 0%, #2d9a8a 100%)',
-                boxShadow: '0 8px 24px rgba(27, 95, 86, 0.3)',
-              }}
+                boxShadow: '0 8px 24px rgba(27, 95, 86, 0.3)'}}
             >
               <HiOutlineChartBar size={24} className="text-white" />
             </div>
@@ -150,8 +147,7 @@ export function Dashboard() {
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
                 background: 'linear-gradient(135deg, #247d70 0%, #33af9f 100%)',
-                boxShadow: '0 8px 24px rgba(36, 125, 112, 0.3)',
-              }}
+                boxShadow: '0 8px 24px rgba(36, 125, 112, 0.3)'}}
             >
               <HiOutlineBookOpen size={24} className="text-white" />
             </div>
@@ -181,8 +177,7 @@ export function Dashboard() {
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
                 background: 'linear-gradient(135deg, #12423c 0%, #1b5f56 100%)',
-                boxShadow: '0 8px 24px rgba(18, 66, 60, 0.3)',
-              }}
+                boxShadow: '0 8px 24px rgba(18, 66, 60, 0.3)'}}
             >
               <HiOutlineClipboardCheck size={24} className="text-white" />
             </div>
@@ -190,8 +185,7 @@ export function Dashboard() {
               className="text-xs font-medium px-3 py-1 rounded-full"
               style={{ 
                 background: attendanceRate >= 80 ? 'rgba(45, 154, 138, 0.1)' : 'rgba(245, 158, 11, 0.1)',
-                color: attendanceRate >= 80 ? '#1b5f56' : '#d97706',
-              }}
+                color: attendanceRate >= 80 ? '#1b5f56' : '#d97706'}}
             >
               {attendanceRate >= 80 ? 'Good' : 'Needs Attention'}
             </span>
@@ -213,8 +207,7 @@ export function Dashboard() {
               className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
               style={{ 
                 background: 'linear-gradient(135deg, #0d312c 0%, #12423c 100%)',
-                boxShadow: '0 8px 24px rgba(13, 49, 44, 0.3)',
-              }}
+                boxShadow: '0 8px 24px rgba(13, 49, 44, 0.3)'}}
             >
               <HiOutlineLightningBolt size={24} className="text-white" />
             </div>
@@ -259,8 +252,7 @@ export function Dashboard() {
                     className="flex items-center gap-4 p-4 rounded-2xl"
                     style={{ 
                       background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
-                      border: '1px solid rgba(45, 154, 138, 0.1)',
-                    }}
+                      border: '1px solid rgba(45, 154, 138, 0.1)'}}
                   >
                     <div 
                       className="w-1 h-14 rounded-full"
@@ -313,8 +305,7 @@ export function Dashboard() {
                   className="p-4 rounded-2xl"
                   style={{ 
                     background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
-                    border: '1px solid rgba(45, 154, 138, 0.1)',
-                  }}
+                    border: '1px solid rgba(45, 154, 138, 0.1)'}}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <span 
@@ -323,8 +314,7 @@ export function Dashboard() {
                         background: quest.type === 'Quiz' ? 'rgba(36, 125, 112, 0.2)' :
                                    quest.type === 'Project' ? 'rgba(27, 95, 86, 0.2)' :
                                    'rgba(13, 49, 44, 0.2)',
-                        color: '#0d312c',
-                      }}
+                        color: '#0d312c'}}
                     >
                       {quest.type}
                     </span>
@@ -341,8 +331,7 @@ export function Dashboard() {
                     <span 
                       className="text-xs font-medium"
                       style={{
-                        color: studentQuest?.status === 'In Progress' ? '#1b5f56' : '#66c3b7',
-                      }}
+                        color: studentQuest?.status === 'In Progress' ? '#1b5f56' : '#66c3b7'}}
                     >
                       {studentQuest?.status}
                     </span>
@@ -366,8 +355,7 @@ export function Dashboard() {
         variants={fadeInUp}
         className="rounded-3xl p-8 text-white relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)',
-        }}
+          background: 'linear-gradient(135deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)'}}
       >
         <div className="absolute inset-0 pointer-events-none">
           <div 
@@ -407,5 +395,6 @@ export function Dashboard() {
     </motion.div>
   );
 }
+
 
 
