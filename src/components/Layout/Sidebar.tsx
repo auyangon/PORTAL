@@ -1,186 +1,137 @@
 ﻿import { motion } from 'framer-motion';
-import {
-  HiOutlineViewGrid,
-  HiOutlineBookOpen,
-  HiOutlineLightningBolt,
+import { 
+  HiOutlineViewGrid, 
+  HiOutlineBookOpen, 
+  HiOutlineClipboardList, 
   HiOutlineDocumentText,
   HiOutlineCalendar,
-  HiOutlineSpeakerphone,
-  HiOutlineClipboardList,
+  HiOutlineBell,
+  HiOutlineClipboardCheck,
+  HiOutlineUser,
   HiOutlineLogout,
-  HiOutlineAcademicCap,
+  HiOutlineAcademicCap
 } from 'react-icons/hi';
+import { useStudent } from '../../context/StudentContext';
 
 interface SidebarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  isMobile?: boolean;
+  onClose?: () => void;
 }
 
-const menuItems = [
-  { id: 'dashboard', label: 'Dashboard', icon: HiOutlineViewGrid },
-  { id: 'courses', label: 'Courses', icon: HiOutlineBookOpen },
-  { id: 'quests', label: 'Quests', icon: HiOutlineLightningBolt },
-  { id: 'materials', label: 'Materials', icon: HiOutlineDocumentText },
-  { id: 'schedule', label: 'Schedule', icon: HiOutlineCalendar },
-  { id: 'announcements', label: 'Announcements', icon: HiOutlineSpeakerphone },
-  { id: 'requests', label: 'Requests', icon: HiOutlineClipboardList },
+const navItems = [
+  { name: 'Dashboard', icon: HiOutlineViewGrid, tab: 'dashboard' },
+  { name: 'Courses', icon: HiOutlineBookOpen, tab: 'courses' },
+  { name: 'Quests', icon: HiOutlineClipboardList, tab: 'quests' },
+  { name: 'Materials', icon: HiOutlineDocumentText, tab: 'materials' },
+  { name: 'Schedule', icon: HiOutlineCalendar, tab: 'schedule' },
+  { name: 'Attendance', icon: HiOutlineClipboardCheck, tab: 'attendance' },
+  { name: 'Announcements', icon: HiOutlineBell, tab: 'announcements' },
+  { name: 'Requests', icon: HiOutlineClipboardList, tab: 'requests' },
 ];
 
-export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
+export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: SidebarProps) {
+  const { currentStudent, logout } = useStudent();
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <motion.aside
-      initial={{ x: -100, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className="fixed left-0 top-0 h-screen w-72 z-50 flex flex-col"
-      style={{
-        background: 'linear-gradient(165deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)',
+    <motion.aside 
+      initial={isMobile ? false : { x: -20, opacity: 0 }}
+      animate={isMobile ? false : { x: 0, opacity: 1 }}
+      className={`h-full ${isMobile ? 'w-64 bg-white/95 backdrop-blur-xl' : 'w-72 fixed left-0 top-0 glass'} flex flex-col`}
+      style={{ 
+        borderRight: '1px solid rgba(45, 154, 138, 0.1)',
+        boxShadow: isMobile ? '2px 0 20px rgba(0,0,0,0.1)' : 'none'
       }}
     >
-      {/* Decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute -top-24 -right-24 w-48 h-48 rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, #66c3b7 0%, transparent 70%)' }}
-        />
-        <div 
-          className="absolute bottom-32 -left-16 w-32 h-32 rounded-full opacity-15"
-          style={{ background: 'radial-gradient(circle, #2d9a8a 0%, transparent 70%)' }}
-        />
-        <div 
-          className="absolute top-1/2 right-0 w-24 h-24 rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #33af9f 0%, transparent 70%)' }}
-        />
-      </div>
-
-      {/* Logo Section */}
-      <div className="relative px-6 py-8">
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-          className="flex items-center gap-4"
-        >
-          <div 
-            className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
-            style={{ 
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%)',
-              border: '1px solid rgba(255,255,255,0.2)',
-            }}
-          >
-            <HiOutlineAcademicCap className="w-7 h-7 text-white" />
+      {/* Logo Area */}
+      <div className={`p-6 ${isMobile ? 'pb-4' : ''}`}>
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <HiOutlineAcademicCap size={24} className="text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white tracking-tight">AUY</h1>
-            <p className="text-xs font-medium text-white/60">Student Portal</p>
+            <h1 className="font-semibold text-lg" style={{ color: '#0d312c' }}>AUY Portal</h1>
+            <p className="text-xs" style={{ color: '#66c3b7' }}>{currentStudent?.studentId}</p>
           </div>
-        </motion.div>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="relative flex-1 px-4 py-4 overflow-y-auto scrollbar-hide">
-        <div className="space-y-1.5">
-          {menuItems.map((item, index) => {
-            const isActive = activeTab === item.id;
-            const Icon = item.icon;
-            
-            return (
-              <motion.button
-                key={item.id}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
-                onClick={() => setActiveTab(item.id)}
-                className={`
-                  group relative w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl
-                  transition-all duration-300 ease-out
-                  ${isActive 
-                    ? 'text-white' 
-                    : 'text-white/60 hover:text-white hover:bg-white/5'
-                  }
-                `}
-              >
-                {/* Active indicator background */}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeTab"
-                    className="absolute inset-0 rounded-2xl"
-                    style={{
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 100%)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
-                    }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                
-                {/* Active indicator line */}
-                {isActive && (
-                  <motion.div
-                    layoutId="activeIndicator"
-                    className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 rounded-full"
-                    style={{
-                      background: 'linear-gradient(180deg, #66c3b7 0%, #2d9a8a 100%)',
-                      boxShadow: '0 0 12px rgba(102, 195, 183, 0.5)',
-                    }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  />
-                )}
-                
-                <Icon className={`relative z-10 w-5 h-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-105'}`} />
-                <span className="relative z-10 text-sm font-medium">{item.label}</span>
-                
-                {/* Hover glow effect */}
-                {!isActive && (
-                  <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                    style={{
-                      background: 'radial-gradient(circle at center, rgba(102, 195, 183, 0.1) 0%, transparent 70%)',
-                    }}
-                  />
-                )}
-              </motion.button>
-            );
-          })}
-        </div>
+      <nav className="flex-1 px-4 space-y-1 overflow-y-auto scrollbar-thin">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.tab;
+          
+          return (
+            <motion.button
+              key={item.tab}
+              whileHover={!isMobile ? { scale: 1.02, x: 4 } : {}}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => handleTabClick(item.tab)}
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all ${
+                isActive ? 'shadow-lg' : ''
+              }`}
+              style={{
+                background: isActive 
+                  ? 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' 
+                  : 'transparent',
+                color: isActive ? '#ffffff' : '#247d70'
+              }}
+            >
+              <Icon size={20} />
+              <span className="font-medium text-sm">{item.name}</span>
+              {isActive && (
+                <motion.div
+                  layoutId="activeIndicator"
+                  className="w-1 h-6 rounded-full ml-auto"
+                  style={{ background: '#ffffff' }}
+                />
+              )}
+            </motion.button>
+          );
+        })}
       </nav>
 
-      {/* Bottom Section */}
-      <div className="relative px-4 pb-6">
-        {/* Divider */}
-        <div 
-          className="h-px mb-4 mx-2"
-          style={{
-            background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)',
-          }}
-        />
-        
-        {/* University Badge */}
-        <div 
-          className="mx-2 p-4 rounded-2xl mb-4"
-          style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.04) 100%)',
-            border: '1px solid rgba(255,255,255,0.1)',
-          }}
-        >
-          <p className="text-xs text-white/40 mb-1">American University</p>
-          <p className="text-sm font-semibold text-white/90">of Yangon</p>
-          <div className="mt-2 flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <p className="text-xs text-white/50">System Online</p>
+      {/* User Profile */}
+      <div className={`p-4 border-t ${isMobile ? 'border-gray-200' : ''}`} 
+           style={{ borderColor: 'rgba(45, 154, 138, 0.1)' }}>
+        <div className="flex items-center space-x-3 mb-3 px-2">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white"
+               style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}>
+            <span className="text-sm font-medium">
+              {currentStudent?.studentName?.charAt(0) || 'S'}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium truncate" style={{ color: '#0d312c' }}>
+              {currentStudent?.studentName || 'Student'}
+            </p>
+            <p className="text-xs truncate" style={{ color: '#66c3b7' }}>
+              {currentStudent?.email}
+            </p>
           </div>
         </div>
         
-        {/* Logout Button */}
         <motion.button
-          whileHover={{ scale: 1.02 }}
+          whileHover={!isMobile ? { scale: 1.02 } : {}}
           whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-white/60 hover:text-white hover:bg-white/5 transition-all duration-300"
+          onClick={logout}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all"
+          style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.05)' }}
         >
-          <HiOutlineLogout className="w-5 h-5" />
-          <span className="text-sm font-medium">Sign Out</span>
+          <HiOutlineLogout size={20} />
+          <span className="font-medium text-sm">Logout</span>
         </motion.button>
       </div>
     </motion.aside>
   );
 }
-

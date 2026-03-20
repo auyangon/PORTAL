@@ -1,129 +1,160 @@
+﻿import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { HiOutlineSearch, HiOutlineBell, HiOutlineRefresh } from 'react-icons/hi';
+import { 
+  HiOutlineSearch, 
+  HiOutlineBell, 
+  HiOutlineUser,
+  HiOutlineClock,
+  HiOutlineLogout,
+  HiOutlineSun,
+  HiOutlineMoon,
+  HiOutlineMenu
+} from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 
 interface TopbarProps {
   title: string;
+  isMobile?: boolean;
+  onMenuClick?: () => void;
 }
 
-export function Topbar({ title }: TopbarProps) {
-  const { currentStudent, refreshData, isLoading } = useStudent();
+export function Topbar({ title, isMobile, onMenuClick }: TopbarProps) {
+  const { currentStudent, logout } = useStudent();
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+  };
+
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
+    document.documentElement.classList.toggle('dark');
+  };
 
   return (
-    <motion.header
-      initial={{ y: -20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      className="fixed top-0 right-0 left-72 z-30 h-20"
-      style={{
-        background: 'rgba(255, 255, 255, 0.85)',
-        backdropFilter: 'blur(20px)',
-        WebkitBackdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(45, 154, 138, 0.08)',
-      }}
+    <header 
+      className={`fixed top-0 right-0 z-30 glass border-b transition-all ${
+        isMobile ? 'left-0' : 'left-72'
+      }`}
+      style={{ borderColor: 'rgba(45, 154, 138, 0.1)' }}
     >
-      <div className="h-full flex items-center justify-between px-8">
-        {/* Page Title */}
-        <div>
-          <h2 
-            className="text-2xl font-semibold tracking-tight"
+      <div className={`${isMobile ? 'px-4 py-2' : 'px-8 py-4'} flex items-center justify-between`}>
+        {/* Left: Menu Button (mobile) or Title (desktop) */}
+        {isMobile ? (
+          <button
+            onClick={onMenuClick}
+            className="p-2 rounded-xl hover:bg-white/50 transition-colors"
+            style={{ color: '#247d70' }}
+          >
+            <HiOutlineMenu size={24} />
+          </button>
+        ) : (
+          <motion.h1 
+            key={title}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-2xl font-semibold"
             style={{ color: '#0d312c' }}
           >
             {title}
-          </h2>
-          <p className="text-sm" style={{ color: '#1b5f56' }}>
-            Welcome back, {currentStudent?.studentName?.split(' ')[0] || 'Student'}
-          </p>
-        </div>
+          </motion.h1>
+        )}
 
-        {/* Right Section */}
-        <div className="flex items-center gap-4">
-          {/* Search */}
-          <div className="relative">
-            <HiOutlineSearch 
-              className="absolute left-4 top-1/2 -translate-y-1/2" 
-              style={{ color: '#247d70' }}
-              size={20} 
-            />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-64 pl-11 pr-4 py-2.5 rounded-xl border-0 text-sm placeholder-opacity-60 focus:outline-none focus:ring-2 transition-all"
-              style={{
-                background: 'rgba(230, 245, 243, 0.8)',
-                color: '#0d312c',
-              }}
-            />
+        {/* Center: Live Clock - hide on very small screens */}
+        {!isMobile && (
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3 px-4 py-2 rounded-2xl"
+                 style={{ background: 'rgba(45, 154, 138, 0.05)' }}>
+              <HiOutlineClock size={20} style={{ color: '#1b5f56' }} />
+              <div className="text-sm">
+                <span className="font-medium" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</span>
+                <span className="mx-2" style={{ color: '#66c3b7' }}>•</span>
+                <span style={{ color: '#247d70' }}>{formatDate(currentTime)}</span>
+              </div>
+            </div>
           </div>
+        )}
 
-          {/* Refresh Button */}
-          <motion.button
-            onClick={refreshData}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            disabled={isLoading}
-            className="p-3 rounded-xl transition-all duration-300 disabled:opacity-50"
-            style={{
-              background: 'linear-gradient(135deg, rgba(27, 95, 86, 0.1) 0%, rgba(36, 125, 112, 0.1) 100%)',
-            }}
-          >
-            <HiOutlineRefresh 
-              size={20} 
-              className={isLoading ? 'animate-spin' : ''}
-              style={{ color: '#1b5f56' }}
-            />
-          </motion.button>
+        {/* Mobile compact clock */}
+        {isMobile && (
+          <div className="flex items-center space-x-2 px-3 py-1 rounded-2xl"
+               style={{ background: 'rgba(45, 154, 138, 0.05)' }}>
+            <HiOutlineClock size={16} style={{ color: '#1b5f56' }} />
+            <span className="text-xs font-medium" style={{ color: '#0d312c' }}>{formatTime(currentTime)}</span>
+          </div>
+        )}
 
-          {/* Notifications */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="relative p-3 rounded-xl transition-all duration-300"
-            style={{
-              background: 'linear-gradient(135deg, rgba(27, 95, 86, 0.1) 0%, rgba(36, 125, 112, 0.1) 100%)',
-            }}
-          >
-            <HiOutlineBell size={20} style={{ color: '#1b5f56' }} />
-            <span 
-              className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border-2 border-white"
-              style={{ background: 'linear-gradient(135deg, #2d9a8a, #33af9f)' }}
-            />
-          </motion.button>
+        {/* Right: Actions */}
+        <div className="flex items-center space-x-2 md:space-x-3">
+          <button className="p-2 rounded-xl hover:bg-white/50 transition-colors"
+                  style={{ color: '#247d70' }}>
+            <HiOutlineSearch size={isMobile ? 18 : 22} />
+          </button>
 
-          {/* Profile */}
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            className="flex items-center gap-3 pl-4 cursor-pointer"
-            style={{ borderLeft: '1px solid rgba(45, 154, 138, 0.15)' }}
+          <button 
+            onClick={() => setShowNotifications(!showNotifications)}
+            className="p-2 rounded-xl hover:bg-white/50 transition-colors relative"
+            style={{ color: '#247d70' }}
           >
-            <div className="text-right">
-              <p className="text-sm font-medium" style={{ color: '#0d312c' }}>
-                {currentStudent?.studentName || 'Loading...'}
-              </p>
-              <p className="text-xs" style={{ color: '#247d70' }}>
-                {currentStudent?.studentId || ''}
-              </p>
+            <HiOutlineBell size={isMobile ? 18 : 22} />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full"
+                  style={{ background: 'linear-gradient(135deg, #1b5f56, #2d9a8a)' }} />
+          </button>
+
+          <button 
+            onClick={toggleDarkMode}
+            className="p-2 rounded-xl hover:bg-white/50 transition-colors hidden sm:block"
+            style={{ color: '#247d70' }}
+          >
+            {isDarkMode ? <HiOutlineSun size={isMobile ? 18 : 22} /> : <HiOutlineMoon size={isMobile ? 18 : 22} />}
+          </button>
+
+          <button 
+            onClick={() => setShowProfile(!showProfile)}
+            className="flex items-center space-x-2 p-2 rounded-xl hover:bg-white/50 transition-colors"
+          >
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white"
+                 style={{ background: 'linear-gradient(135deg, #1b5f56, #247d70)' }}>
+              <span className="font-medium text-sm">
+                {currentStudent?.studentName?.charAt(0) || 'S'}
+              </span>
             </div>
-            <div 
-              className="w-10 h-10 rounded-xl overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)',
-              }}
-            >
-              {currentStudent?.profileImage ? (
-                <img
-                  src={currentStudent.profileImage}
-                  alt={currentStudent.studentName}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white font-medium">
-                  {currentStudent?.studentName?.charAt(0) || '?'}
-                </div>
-              )}
-            </div>
-          </motion.div>
+            {!isMobile && (
+              <div className="text-left hidden lg:block">
+                <p className="text-sm font-medium" style={{ color: '#0d312c' }}>
+                  {currentStudent?.studentName || 'Student'}
+                </p>
+                <p className="text-xs" style={{ color: '#66c3b7' }}>
+                  {currentStudent?.studentId || 'AUY Student'}
+                </p>
+              </div>
+            )}
+          </button>
         </div>
       </div>
-    </motion.header>
+    </header>
   );
 }

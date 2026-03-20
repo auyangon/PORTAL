@@ -82,12 +82,12 @@ export function Dashboard() {
       variants={staggerContainer}
       initial="hidden"
       animate="visible"
-      className="space-y-8"
+      className="space-y-4 md:space-y-8"
     >
       {/* Live Clock Banner */}
       <motion.div
         variants={fadeInUp}
-        className="glass-card p-6 flex items-center justify-between"
+        className="glass-card p-4 md:p-6 flex items-center justify-between"
       >
         <div className="flex items-center space-x-4">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
@@ -106,12 +106,12 @@ export function Dashboard() {
       </motion.div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:p-6">
         {/* GPA Card */}
         <motion.div
           variants={statCardVariants}
           whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -139,7 +139,7 @@ export function Dashboard() {
         <motion.div
           variants={statCardVariants}
           whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -169,7 +169,7 @@ export function Dashboard() {
         <motion.div
           variants={statCardVariants}
           whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -199,7 +199,7 @@ export function Dashboard() {
         <motion.div
           variants={statCardVariants}
           whileHover="hover"
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-start justify-between mb-4">
@@ -225,11 +225,11 @@ export function Dashboard() {
       </div>
 
       {/* Second Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:p-6">
         {/* Today's Schedule */}
         <motion.div
           variants={fadeInUp}
-          className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-center justify-between mb-6">
@@ -282,7 +282,7 @@ export function Dashboard() {
         {/* Upcoming Quests */}
         <motion.div
           variants={fadeInUp}
-          className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-xl"
+          className="bg-white/80 backdrop-blur-xl rounded-3xl p-4 md:p-6 shadow-xl"
           style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
         >
           <div className="flex items-center justify-between mb-6">
@@ -353,7 +353,7 @@ export function Dashboard() {
       {/* Quick Stats Row */}
       <motion.div
         variants={fadeInUp}
-        className="rounded-3xl p-8 text-white relative overflow-hidden"
+        className="rounded-3xl p-4 md:p-8 text-white relative overflow-hidden"
         style={{
           background: 'linear-gradient(135deg, #0d312c 0%, #12423c 30%, #1b5f56 70%, #247d70 100%)'}}
       >
@@ -368,13 +368,13 @@ export function Dashboard() {
           />
         </div>
 
-        <div className="relative flex items-center justify-between flex-wrap gap-6">
+        <div className="relative flex items-center justify-between flex-wrap gap-4 md:p-6">
           <div>
             <p className="text-white/60 text-sm mb-1">Student Information</p>
             <h3 className="text-xl font-semibold">{currentStudent?.studentName}</h3>
             <p className="text-white/60 text-sm mt-1">{currentStudent?.studentId} • {currentStudent?.major}</p>
           </div>
-          <div className="flex gap-8 flex-wrap">
+          <div className="flex gap-4 md:p-8 flex-wrap">
             <div className="text-center">
               <p className="text-3xl font-bold">{currentStudent?.intake}</p>
               <p className="text-white/60 text-sm">Intake</p>
@@ -395,6 +395,7 @@ export function Dashboard() {
     </motion.div>
   );
 }
+
 
 
 

@@ -39,49 +39,53 @@ function AppContent() {
   useEffect(() => {
     if (!isLoading) {
       const timer = setTimeout(() => setShowLoading(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading]);
-
-  if (!currentStudent) {
-    return <Login />;
-  }
-
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard />;
-      case 'courses':
-        return <Courses />;
-      case 'quests':
-        return <Quests />;
-      case 'materials':
-        return <Materials />;
-      case 'schedule':
-        return <Schedule />;
-      case 'attendance':
-        return <Attendance />;
-      case 'announcements':
-        return <Announcements />;
-      case 'requests':
-        return <Requests />;
-      default:
-        return <Dashboard />;
-    }
-  };
-
-  if (showLoading) {
-    return <LoadingScreen />;
-  }
-
-  return (
+        return (
     <div className="min-h-screen">
-      <Sidebar activeTab={currentPage} setActiveTab={(tab) => setCurrentPage(tab as NavigationPage)} />
+      {/* Mobile Header with Hamburger */}
+      {isMobile && (
+        <div className="fixed top-0 left-0 right-0 z-50 glass px-4 py-3 flex items-center justify-between safe-top">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="p-2 rounded-xl"
+            style={{ background: 'rgba(45, 154, 138, 0.1)' }}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                    d={sidebarOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+            </svg>
+          </button>
+          <h1 className="text-lg font-semibold" style={{ color: '#0d312c' }}>{PAGE_TITLES[currentPage]}</h1>
+          <div className="w-10" /> {/* Spacer */}
+        </div>
+      )}
+
+      {/* Sidebar - hidden on mobile unless open */}
+      <div className={isMobile ? `fixed inset-0 z-40 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}` : ''}>
+        <Sidebar 
+          activeTab={currentPage} 
+          setActiveTab={(tab) => setCurrentPage(tab as NavigationPage)}
+          isMobile={isMobile}
+          onClose={() => setSidebarOpen(false)}
+        />
+      </div>
+
+      {/* Overlay for mobile sidebar */}
+      {isMobile && sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
       
-      <div className="ml-72">
-        <Topbar title={PAGE_TITLES[currentPage]} />
+      {/* Main Content - adjusts for mobile */}
+      <div className={isMobile ? 'pt-16' : 'ml-72'}>
+        <Topbar 
+          title={PAGE_TITLES[currentPage]} 
+          isMobile={isMobile}
+          onMenuClick={() => setSidebarOpen(true)}
+        />
         
-        <main className="pt-28 px-8 pb-8">
+        <main className={isMobile ? 'px-4 pb-8 pt-4' : 'pt-28 px-8 pb-8'}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
@@ -122,5 +126,6 @@ export default function App() {
     
   );
 }
+
 
 

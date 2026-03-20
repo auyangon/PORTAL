@@ -91,10 +91,10 @@ export function Attendance() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3 sm:p-4 md:p-6">
         <motion.div
           variants={fadeInUp}
-          className="glass-card p-6"
+          className="glass-card p-3 sm:p-4 md:p-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
@@ -110,7 +110,7 @@ export function Attendance() {
 
         <motion.div
           variants={fadeInUp}
-          className="glass-card p-6"
+          className="glass-card p-3 sm:p-4 md:p-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
@@ -126,7 +126,7 @@ export function Attendance() {
 
         <motion.div
           variants={fadeInUp}
-          className="glass-card p-6"
+          className="glass-card p-3 sm:p-4 md:p-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
@@ -142,7 +142,7 @@ export function Attendance() {
 
         <motion.div
           variants={fadeInUp}
-          className="glass-card p-6"
+          className="glass-card p-3 sm:p-4 md:p-6"
         >
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
@@ -158,7 +158,7 @@ export function Attendance() {
       </div>
 
       {/* Attendance by Course */}
-      <motion.div variants={fadeInUp} className="glass-card p-6">
+      <motion.div variants={fadeInUp} className="glass-card p-3 sm:p-4 md:p-6">
         <h2 className="text-xl font-semibold mb-6" style={{ color: '#0d312c' }}>Attendance by Course</h2>
         <div className="space-y-6">
           {courseAttendance.map(course => (
@@ -209,7 +209,7 @@ export function Attendance() {
       </motion.div>
 
       {/* Recent Attendance */}
-      <motion.div variants={fadeInUp} className="glass-card p-6">
+      <motion.div variants={fadeInUp} className="glass-card p-3 sm:p-4 md:p-6">
         <h2 className="text-xl font-semibold mb-6" style={{ color: '#0d312c' }}>Recent Attendance</h2>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -253,3 +253,4 @@ export function Attendance() {
     </motion.div>
   );
 }
+

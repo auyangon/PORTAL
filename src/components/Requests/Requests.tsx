@@ -191,7 +191,7 @@ export function Requests() {
                 />
               </div>
 
-              <div className="flex items-center gap-4 pt-4">
+              <div className="flex items-center gap-2 sm:gap-3 md:gap-4 pt-4">
                 <motion.button
                   type="submit"
                   disabled={submitting}
@@ -242,7 +242,7 @@ export function Requests() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <motion.div variants={fadeInUp} className="glass-card p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                  style={{ background: 'rgba(45, 154, 138, 0.1)' }}>
               <HiOutlineClipboardList size={24} style={{ color: '#1b5f56' }} />
@@ -255,7 +255,7 @@ export function Requests() {
         </motion.div>
 
         <motion.div variants={fadeInUp} className="glass-card p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                  style={{ background: 'rgba(245, 158, 11, 0.1)' }}>
               <HiOutlineClock size={24} style={{ color: '#f59e0b' }} />
@@ -270,7 +270,7 @@ export function Requests() {
         </motion.div>
 
         <motion.div variants={fadeInUp} className="glass-card p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                  style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
               <HiOutlineCheckCircle size={24} style={{ color: '#10b981' }} />
@@ -285,7 +285,7 @@ export function Requests() {
         </motion.div>
 
         <motion.div variants={fadeInUp} className="glass-card p-6">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
             <div className="w-12 h-12 rounded-2xl flex items-center justify-center"
                  style={{ background: 'rgba(239, 68, 68, 0.1)' }}>
               <HiOutlineXCircle size={24} style={{ color: '#ef4444' }} />
@@ -322,7 +322,7 @@ export function Requests() {
                 <motion.div
                   key={request.requestId}
                   whileHover={{ scale: 1.01 }}
-                  className="p-5 rounded-2xl"
+                  className="p-3 sm:p-4 md:p-5 rounded-2xl"
                   style={{ 
                     background: 'linear-gradient(135deg, rgba(230, 245, 243, 0.8) 0%, rgba(204, 235, 231, 0.5) 100%)',
                     border: '1px solid rgba(45, 154, 138, 0.1)'
@@ -378,5 +378,6 @@ export function Requests() {
     </motion.div>
   );
 }
+
 
 
