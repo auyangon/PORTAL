@@ -7,10 +7,12 @@ import {
   HiOutlineClock,
   HiOutlineAcademicCap
 } from 'react-icons/hi';
-import { useStudent } from '../../context/StudentContext';
+import { useStudent } from "../../context/StudentContext";
+import { QRScanner } from "./QRScanner";
 import { staggerContainer, fadeInUp } from '../../utils/animations';
 
 export function Attendance() {
+  const [showQRScanner, setShowQRScanner] = useState(false); {
   const { 
     attendance, 
     getEnrolledCourses, 
@@ -81,7 +83,17 @@ export function Attendance() {
           <p className="text-sm mt-1" style={{ color: '#247d70' }}>
             Track your class attendance across all courses
           </p>
-        </div>
+        </div>      {/* QR Check-in Button */}
+      <div className="flex gap-3">
+        <button
+          onClick={() => setShowQRScanner(!showQRScanner)}
+          className="px-4 py-2 rounded-xl text-white font-medium flex items-center gap-2"
+          style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}
+        >
+          <HiOutlineQrcode size={18} />
+          {showQRScanner ? 'Close Scanner' : 'QR Check-in'}
+        </button>
+      </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
             <p className="text-2xl font-bold" style={{ color: '#0d312c' }}>{overallRate}%</p>
@@ -249,9 +261,24 @@ export function Attendance() {
             </tbody>
           </table>
         </div>
-      </motion.div>
+            {/* QR Scanner Modal */}
+      {showQRScanner && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="max-w-md w-full">
+            <QRScanner 
+              studentEmail={currentStudent?.email || ''}
+              onSuccess={() => {
+                setShowQRScanner(false);
+                refreshData();
+              }}
+              onClose={() => setShowQRScanner(false)}
+            />
+          </div>
+        </div>
+      )}</motion.div>
     </motion.div>
   );
 }
+
 
 
