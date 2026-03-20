@@ -8,7 +8,7 @@ import {
   HiOutlineClock,
   HiOutlineChartBar,
   HiOutlineLightningBolt,
-} from 'react-icons/hi';
+, HiOutlineLink } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 import { 
   staggerContainer, 
@@ -407,3 +407,5 @@ export function Dashboard() {
     </motion.div>
   );
 }
+
+

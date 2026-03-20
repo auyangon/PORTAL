@@ -1,4 +1,4 @@
-// =====================================================
+﻿// =====================================================
 // AUY Student Portal - Type Definitions
 // EXACTLY matches Google Sheets column names
 // =====================================================
@@ -15,6 +15,7 @@ export interface Student {
   gpa: string;
   profileImage: string;
   createdAt: string;
+  questLink?: string;  // Optional link to assignment
 }
 
 // Courses Sheet
@@ -72,6 +73,7 @@ export interface Announcement {
   audience: string;
   courseCode: string;
   createdAt: string;
+  questLink?: string;  // Optional link to assignment
   createdBy: string;
 }
 
@@ -95,6 +97,7 @@ export interface Quest {
   maxScore: string;
   status: string;
   createdAt: string;
+  questLink?: string;  // Optional link to assignment
 }
 
 // StudentQuests Sheet
@@ -146,3 +149,4 @@ export interface AppState {
   isLoading: boolean;
   error: string | null;
 }
+
