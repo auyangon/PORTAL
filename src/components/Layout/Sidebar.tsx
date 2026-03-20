@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import {
   HiOutlineViewGrid,
   HiOutlineBookOpen,
@@ -183,3 +183,4 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
     </motion.aside>
   );
 }
+

@@ -126,13 +126,7 @@ export interface Request {
 
 // Navigation Types
 export type NavigationPage = 
-  | 'dashboard' 
-  | 'courses' 
-  | 'quests' 
-  | 'materials' 
-  | 'schedule' 
-  | 'announcements' 
-  | 'requests';
+  | dashboard | courses | quests | materials | schedule | attendance | announcements | requests;
 
 // App State Types
 export interface AppState {
@@ -149,4 +143,5 @@ export interface AppState {
   isLoading: boolean;
   error: string | null;
 }
+
 

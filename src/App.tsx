@@ -26,6 +26,7 @@ const PAGE_TITLES: Record<NavigationPage, string> = {
   quests: 'Quests',
   materials: 'Materials',
   schedule: 'Schedule',
+  attendance: 'Attendance',
   announcements: 'Announcements',
   requests: 'Requests',
 };
@@ -58,6 +59,8 @@ function AppContent() {
         return <Materials />;
       case 'schedule':
         return <Schedule />;
+      case 'attendance':
+        return <Attendance />;
       case 'announcements':
         return <Announcements />;
       case 'requests':
@@ -119,4 +122,5 @@ export default function App() {
     
   );
 }
+
 
