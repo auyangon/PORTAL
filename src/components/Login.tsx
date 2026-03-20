@@ -1,15 +1,11 @@
 ﻿import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 import { 
-  HiOutlineMail, 
   HiOutlineAcademicCap, 
   HiOutlineSparkles, 
-  HiOutlineBookOpen,
-  HiOutlineLockClosed,
-  HiOutlineGlobeAlt
+  HiOutlineBookOpen
 } from 'react-icons/hi';
-import { FcGoogle } from 'react-icons/fc';
 import { useStudent } from '../context/StudentContext';
 import { decodeGoogleCredential } from '../services/googleAuth';
 
@@ -90,12 +86,10 @@ const getQuoteOfTheDay = () => {
 };
 
 export function Login() {
-  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { login, loginWithGoogle } = useStudent();
+  const { loginWithGoogle } = useStudent();
   
   // Get today's quote
   const quoteOfTheDay = getQuoteOfTheDay();
@@ -126,26 +120,9 @@ export function Login() {
     return () => clearInterval(timer);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setIsLoading(true);
-    
-    try {
-      const success = await login(email);
-      if (!success) {
-        setError('Email not found. Please use your AUY email.');
-      }
-    } catch (err) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleGoogleSuccess = async (credentialResponse: any) => {
     if (credentialResponse.credential) {
-      setIsGoogleLoading(true);
+      setIsLoading(true);
       try {
         const user = decodeGoogleCredential(credentialResponse.credential);
         if (user?.email) {
@@ -157,7 +134,7 @@ export function Login() {
       } catch (err) {
         setError('Google login failed. Please try again.');
       } finally {
-        setIsGoogleLoading(false);
+        setIsLoading(false);
       }
     }
   };
@@ -336,7 +313,7 @@ export function Login() {
             </motion.div>
           </motion.div>
 
-          {/* Right Side - Login Card */}
+          {/* Right Side - Google Login Only */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -389,132 +366,50 @@ export function Login() {
                 </motion.p>
               </div>
 
-              {/* Email Login Form */}
-              <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Google Login Button - Centered */}
+              <div className="flex flex-col items-center justify-center py-8">
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 }}
+                  className="w-full max-w-sm mx-auto"
                 >
-                  <label className="block text-sm font-medium mb-2" style={{ color: '#1b5f56' }}>
-                    AUY Email Address
-                  </label>
-                  <div className="relative group">
-                    <HiOutlineMail className="absolute left-4 top-1/2 -translate-y-1/2 transition-colors group-focus-within:text-seafoam-600" 
-                                  size={20} style={{ color: '#66c3b7' }} />
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="student@auy.edu.mm"
-                      className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 focus:outline-none transition-all"
-                      style={{ 
-                        borderColor: error ? '#ef4444' : '#e2e8f0',
-                        backgroundColor: '#f8fafc'
-                      }}
-                      required
-                    />
-                    
-                    {/* Animated border on focus */}
-                    <motion.div
-                      initial={{ scaleX: 0 }}
-                      whileInView={{ scaleX: 1 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full"
-                      style={{ 
-                        background: 'linear-gradient(90deg, #1b5f56, #2d9a8a)',
-                        transformOrigin: 'left'
-                      }}
-                    />
-                  </div>
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    theme="outline"
+                    size="large"
+                    text="signin_with"
+                    shape="rectangular"
+                    width="100%"
+                  />
                 </motion.div>
 
-                <motion.button
-                  type="submit"
-                  disabled={isLoading}
-                  whileHover={{ scale: 1.02, boxShadow: '0 20px 30px -10px #1b5f56' }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 rounded-2xl font-medium text-white transition-all relative overflow-hidden group"
-                  style={{
-                    background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)'
-                  }}
-                >
-                  {/* Shine effect */}
-                  <motion.div
-                    animate={{ x: ['-100%', '200%'] }}
-                    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                  />
-                  
-                  <span className="relative z-10">
-                    {isLoading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
-                        />
-                        Logging in...
-                      </span>
-                    ) : (
-                      'Continue with Email'
-                    )}
-                  </span>
-                </motion.button>
-              </form>
+                {/* Error Message */}
+                {error && (
+                  <motion.p
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 text-sm text-red-500 text-center"
+                  >
+                    {error}
+                  </motion.p>
+                )}
 
-              {/* Divider */}
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t" style={{ borderColor: '#e2e8f0' }}></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-4 bg-white" style={{ color: '#66c3b7' }}>Or continue with</span>
-                </div>
+                {/* Quick tip */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="mt-8 p-4 rounded-2xl w-full"
+                  style={{ background: 'rgba(45, 154, 138, 0.05)' }}
+                >
+                  <p className="text-xs flex items-center justify-center gap-2" style={{ color: '#247d70' }}>
+                    <HiOutlineBookOpen size={14} />
+                    <span>Sign in with your Google account to access the portal</span>
+                  </p>
+                </motion.div>
               </div>
-
-              {/* Google Login Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
-                className="w-full"
-              >
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
-                  theme="outline"
-                  size="large"
-                  text="continue_with"
-                  shape="rectangular"
-                  width="100%"
-                />
-              </motion.div>
-
-              {/* Error Message */}
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 text-sm text-red-500 text-center"
-                >
-                  {error}
-                </motion.p>
-              )}
-
-              {/* Quick tips */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8 }}
-                className="mt-6 p-4 rounded-2xl"
-                style={{ background: 'rgba(45, 154, 138, 0.05)' }}
-              >
-                <p className="text-xs flex items-center gap-2" style={{ color: '#247d70' }}>
-                  <HiOutlineBookOpen size={14} />
-                  <span className="font-medium">Quick Tip:</span> Use your AUY email or Google account to access all features
-                </p>
-              </motion.div>
 
               {/* Decorative Footer */}
               <div className="absolute bottom-0 right-0 w-32 h-32 opacity-5">
