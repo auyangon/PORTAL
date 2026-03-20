@@ -186,7 +186,7 @@ export function Attendance() {
                    style={{ background: 'rgba(45, 154, 138, 0.1)' }}>
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={{ width: ${course.rate}% }}
+                  animate={{ width: course.rate + "%" }}
                   transition={{ duration: 0.8 }}
                   className="h-full rounded-full"
                   style={{ 
@@ -253,4 +253,5 @@ export function Attendance() {
     </motion.div>
   );
 }
+
 
