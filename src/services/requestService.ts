@@ -7,10 +7,10 @@
 }
 
 // Admin email to receive notifications
-const ADMIN_EMAIL = 'admin@auy.edu.mm'; // Change this to your admin email
+const ADMIN_EMAIL = 'admin@auy.edu.mm';
 
 // Google Apps Script Web App URL for sending emails
-const EMAIL_WEB_APP_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'; // You'll create this
+const EMAIL_WEB_APP_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 export const submitRequest = async (requestData: RequestData) => {
   try {
@@ -64,7 +64,6 @@ export const submitRequest = async (requestData: RequestData) => {
   }
 };
 
-// For admin dashboard - get all requests
 export const getAllRequests = async () => {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec?sheet=Requests');
@@ -76,7 +75,6 @@ export const getAllRequests = async () => {
   }
 };
 
-// Update request status (admin only)
 export const updateRequestStatus = async (requestId: string, status: string, adminNote: string) => {
   try {
     const response = await fetch('https://script.google.com/macros/s/AKfycbyfmemkEGxuQiDwTEGQzS6IsyzUEl1PtO-zX4_Ml9hYi5Hn0OcCBm7U5iyIed37XHTI/exec', {
