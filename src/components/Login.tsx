@@ -1,7 +1,17 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { HiOutlineMail, HiOutlineAcademicCap, HiOutlineSparkles, HiOutlineBookOpen } from 'react-icons/hi';
+import { GoogleLogin } from '@react-oauth/google';
+import { 
+  HiOutlineMail, 
+  HiOutlineAcademicCap, 
+  HiOutlineSparkles, 
+  HiOutlineBookOpen,
+  HiOutlineLockClosed,
+  HiOutlineGlobeAlt
+} from 'react-icons/hi';
+import { FcGoogle } from 'react-icons/fc';
 import { useStudent } from '../context/StudentContext';
+import { decodeGoogleCredential } from '../services/googleAuth';
 
 // 🌟 Daily Motivational Quotes
 const QUOTES = [
@@ -83,9 +93,9 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [showQuote, setShowQuote] = useState(true);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
-  const { login } = useStudent();
+  const { login, loginWithGoogle } = useStudent();
   
   // Get today's quote
   const quoteOfTheDay = getQuoteOfTheDay();
@@ -131,6 +141,29 @@ export function Login() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse: any) => {
+    if (credentialResponse.credential) {
+      setIsGoogleLoading(true);
+      try {
+        const user = decodeGoogleCredential(credentialResponse.credential);
+        if (user?.email) {
+          const success = await loginWithGoogle(user.email);
+          if (!success) {
+            setError('Email not found in our system. Please use your AUY email.');
+          }
+        }
+      } catch (err) {
+        setError('Google login failed. Please try again.');
+      } finally {
+        setIsGoogleLoading(false);
+      }
+    }
+  };
+
+  const handleGoogleError = () => {
+    setError('Google login failed. Please try again.');
   };
 
   return (
@@ -291,7 +324,7 @@ export function Login() {
                 {/* Stats */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
                   <div className="text-center p-4 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                    <p className="text-2xl font-bold text-white">52+</p>
+                    <p className="text-2xl font-bold text-white">50+</p>
                     <p className="text-white/60 text-sm">Courses</p>
                   </div>
                   <div className="text-center p-4 rounded-2xl" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
@@ -356,8 +389,8 @@ export function Login() {
                 </motion.p>
               </div>
 
-              {/* Login Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Email Login Form */}
+              <form onSubmit={handleSubmit} className="space-y-4">
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -394,15 +427,6 @@ export function Login() {
                       }}
                     />
                   </div>
-                  {error && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-2 text-sm text-red-500"
-                    >
-                      {error}
-                    </motion.p>
-                  )}
                 </motion.div>
 
                 <motion.button
@@ -433,35 +457,62 @@ export function Login() {
                         Logging in...
                       </span>
                     ) : (
-                      'Continue to Portal'
+                      'Continue with Email'
                     )}
                   </span>
                 </motion.button>
-
-                {/* Quick tips */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="mt-6 p-4 rounded-2xl"
-                  style={{ background: 'rgba(45, 154, 138, 0.05)' }}
-                >
-                  <p className="text-xs flex items-center gap-2" style={{ color: '#247d70' }}>
-                    <HiOutlineBookOpen size={14} />
-                    <span className="font-medium">Quick Tip:</span> Use your AUY email to access all features
-                  </p>
-                </motion.div>
               </form>
 
-              {/* Student List */}
+              {/* Divider */}
+              <div className="relative my-6">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t" style={{ borderColor: '#e2e8f0' }}></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-4 bg-white" style={{ color: '#66c3b7' }}>Or continue with</span>
+                </div>
+              </div>
+
+              {/* Google Login Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7 }}
+                className="w-full"
+              >
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                  theme="outline"
+                  size="large"
+                  text="continue_with"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </motion.div>
+
+              {/* Error Message */}
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-4 text-sm text-red-500 text-center"
+                >
+                  {error}
+                </motion.p>
+              )}
+
+              {/* Quick tips */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.9 }}
-                className="mt-6 text-center"
+                transition={{ delay: 0.8 }}
+                className="mt-6 p-4 rounded-2xl"
+                style={{ background: 'rgba(45, 154, 138, 0.05)' }}
               >
-                <p className="text-xs" style={{ color: '#66c3b7' }}>
-                  Available students: offiaung8@gmail.com, akmkyawminn@gmail.com, ll8084204@gmail.com, ...
+                <p className="text-xs flex items-center gap-2" style={{ color: '#247d70' }}>
+                  <HiOutlineBookOpen size={14} />
+                  <span className="font-medium">Quick Tip:</span> Use your AUY email or Google account to access all features
                 </p>
               </motion.div>
 
