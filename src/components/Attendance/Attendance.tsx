@@ -1,5 +1,5 @@
 ﻿import React, { useMemo } from 'react';
-import { useStudent } from '../context/StudentContext';
+import { useStudent } from '../../context/StudentContext';
 
 export function Attendance() {
   const { attendance, getEnrolledCourses } = useStudent();
@@ -45,4 +45,5 @@ export function Attendance() {
     </div>
   );
 }
+
 
