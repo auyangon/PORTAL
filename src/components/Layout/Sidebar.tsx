@@ -31,7 +31,6 @@ const navItems = [
   { name: 'Attendance', icon: HiOutlineClipboardCheck, tab: 'attendance' },
   { name: 'Announcements', icon: HiOutlineBell, tab: 'announcements' },
   { name: 'Requests', icon: HiOutlineClipboardList, tab: 'requests' },
-  { name: 'Library', icon: HiOutlineLibrary, tab: 'library' },
 ];
 
 export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: SidebarProps) {

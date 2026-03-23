@@ -14,7 +14,7 @@ import { Schedule } from './components/Schedule/Schedule';
 import { Attendance } from './components/Attendance/Attendance';
 import { Announcements } from './components/Announcements/Announcements';
 import { Requests } from './components/Requests/Requests';
-import { Library } from './components/Library/Library';
+
 import { LoadingSpinner } from './components/UI/LoadingSpinner';
 import { pageVariants } from './utils/animations';
 import type { NavigationPage } from './types';
@@ -30,7 +30,7 @@ const PAGE_TITLES: Record<NavigationPage, string> = {
   attendance: 'Attendance',
   announcements: 'Announcements',
   requests: 'Requests',
-  library: 'Library',
+  
 };
 
 function AppContent() {
@@ -67,7 +67,7 @@ function AppContent() {
       case 'attendance': return <Attendance />;
       case 'announcements': return <Announcements />;
       case 'requests': return <Requests />;
-      case 'library': return <Library />;
+      
       default: return <Dashboard />;
     }
   };

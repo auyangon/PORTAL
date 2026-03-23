@@ -1,236 +1,153 @@
-import { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  HiOutlineDocumentText,
-  HiOutlineVideoCamera,
-  HiOutlineDownload,
-  HiOutlineExternalLink,
+import { 
+  HiOutlineDocumentText, 
   HiOutlineFolder,
   HiOutlineSearch,
+  HiOutlineBookOpen
 } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06 },
-  },
-};
-
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { y: 0, opacity: 1 },
-};
-
 export function Materials() {
-  const { materials, getCourseByCode, getEnrolledCourses } = useStudent();
+  const { getCourseMaterials, getCourseByCode, getEnrolledCourses } = useStudent();
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCourse, setSelectedCourse] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState('');
-
+  
   const enrolledCourses = getEnrolledCourses();
-  const enrolledCourseCodes = enrolledCourses.map(c => c.courseCode);
-
-  // Filter materials for enrolled courses
-  const relevantMaterials = materials.filter(m => enrolledCourseCodes.includes(m.courseCode));
-
-  const filteredMaterials = relevantMaterials
-    .filter(m => selectedCourse === 'all' || m.courseCode === selectedCourse)
-    .filter(m => 
-      m.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      m.courseCode.toLowerCase().includes(searchQuery.toLowerCase())
+  
+  let allMaterials: any[] = [];
+  enrolledCourses.forEach(course => {
+    const materials = getCourseMaterials(course.courseCode);
+    materials.forEach(m => {
+      allMaterials.push({
+        ...m,
+        courseName: course.courseName,
+        courseCode: course.courseCode
+      });
+    });
+  });
+  
+  // Filter materials
+  let filteredMaterials = allMaterials;
+  if (selectedCourse !== 'all') {
+    filteredMaterials = filteredMaterials.filter(m => m.courseCode === selectedCourse);
+  }
+  if (searchTerm) {
+    filteredMaterials = filteredMaterials.filter(m => 
+      m.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      m.type?.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-  // Group materials by course
-  const materialsByCourse = filteredMaterials.reduce((acc, material) => {
-    if (!acc[material.courseCode]) {
-      acc[material.courseCode] = [];
-    }
-    acc[material.courseCode].push(material);
-    return acc;
-  }, {} as Record<string, typeof materials>);
-
-  const getTypeIcon = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'video':
-        return <HiOutlineVideoCamera size={20} />;
-      case 'pdf':
-        return <HiOutlineDocumentText size={20} />;
-      default:
-        return <HiOutlineFolder size={20} />;
-    }
-  };
-
-  const getTypeStyle = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'video':
-        return { bg: 'rgba(45, 154, 138, 0.15)', color: '#1b5f56' };
-      case 'pdf':
-        return { bg: 'rgba(36, 125, 112, 0.15)', color: '#247d70' };
-      default:
-        return { bg: 'rgba(102, 195, 183, 0.15)', color: '#247d70' };
-    }
-  };
+  }
+  
+  // Library resources
+  const libraryResources = [
+    { name: "Project Gutenberg", url: "https://www.gutenberg.org", desc: "70,000+ free eBooks" },
+    { name: "OpenStax", url: "https://openstax.org", desc: "Free college textbooks" },
+    { name: "Khan Academy", url: "https://www.khanacademy.org", desc: "Free video lessons" },
+    { name: "Open Yale Courses", url: "https://oyc.yale.edu", desc: "Free Yale courses" },
+    { name: "MIT OpenCourseWare", url: "https://ocw.mit.edu", desc: "Free MIT courses" },
+    { name: "JSTOR", url: "https://www.jstor.org", desc: "Academic journals (free account)" },
+    { name: "Google Scholar", url: "https://scholar.google.com", desc: "Search academic papers" },
+    { name: "Internet Archive", url: "https://archive.org", desc: "Millions of free books" }
+  ];
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="space-y-8"
-    >
+    <div className="space-y-6">
       {/* Header */}
-      <motion.div variants={itemVariants} className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold" style={{ color: '#0d312c' }}>Course Materials</h2>
-          <p style={{ color: '#247d70' }}>{relevantMaterials.length} materials available</p>
-        </div>
-      </motion.div>
-
+      <div>
+        <h1 className="text-2xl font-bold text-seafoam-900">Course Materials</h1>
+        <p className="text-sm text-seafoam-600 mt-1">Access lecture notes, slides, and readings</p>
+      </div>
+      
       {/* Filters */}
-      <motion.div variants={itemVariants} className="flex flex-wrap gap-4">
-        {/* Search */}
-        <div className="relative flex-1 min-w-[240px]">
-          <HiOutlineSearch 
-            className="absolute left-4 top-1/2 -translate-y-1/2" 
-            size={20}
-            style={{ color: '#247d70' }}
-          />
-          <input
-            type="text"
-            placeholder="Search materials..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-white/80 backdrop-blur-xl rounded-2xl text-sm focus:outline-none focus:ring-2 transition-all"
-            style={{ 
-              border: '1px solid rgba(45, 154, 138, 0.1)',
-              color: '#0d312c',
-            }}
-          />
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex-1">
+          <div className="relative">
+            <HiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-seafoam-400" size={18} />
+            <input
+              type="text"
+              placeholder="Search materials..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 rounded-xl border border-seafoam-200 focus:outline-none focus:ring-2 focus:ring-seafoam-400"
+            />
+          </div>
         </div>
-
-        {/* Course Filter */}
         <select
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
-          className="px-5 py-3 bg-white/80 backdrop-blur-xl rounded-2xl text-sm cursor-pointer focus:outline-none focus:ring-2 transition-all"
-          style={{ 
-            border: '1px solid rgba(45, 154, 138, 0.1)',
-            color: '#0d312c',
-          }}
+          className="px-4 py-2 rounded-xl border border-seafoam-200 focus:outline-none focus:ring-2 focus:ring-seafoam-400 bg-white"
         >
           <option value="all">All Courses</option>
           {enrolledCourses.map(course => (
             <option key={course.courseCode} value={course.courseCode}>
-              {course.courseCode} - {course.courseName}
+              {course.courseName}
             </option>
           ))}
         </select>
-      </motion.div>
-
-      {/* Materials by Course */}
-      <div className="space-y-8">
-        {Object.entries(materialsByCourse).map(([courseCode, courseMaterials], idx) => {
-          const course = getCourseByCode(courseCode);
-          
-          return (
-            <motion.div key={courseCode} variants={itemVariants}>
-              {/* Course Header */}
-              <div className="flex items-center gap-4 mb-4">
-                <div 
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${
-                      idx % 3 === 0 ? '#0d312c, #1b5f56' :
-                      idx % 3 === 1 ? '#1b5f56, #247d70' :
-                      '#247d70, #2d9a8a'
-                    })`,
-                  }}
-                >
-                  <span className="text-white text-sm font-bold">
-                    {courseCode.slice(0, 2)}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="font-semibold" style={{ color: '#0d312c' }}>{course?.courseName || courseCode}</h3>
-                  <p className="text-sm" style={{ color: '#247d70' }}>{courseMaterials.length} materials</p>
-                </div>
-              </div>
-
-              {/* Materials Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {courseMaterials
-                  .sort((a, b) => parseInt(a.week) - parseInt(b.week))
-                  .map((material) => {
-                    const typeStyle = getTypeStyle(material.type);
-                    
-                    return (
-                      <motion.a
-                        key={material.materialId}
-                        href={material.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        whileHover={{ scale: 1.02, y: -2 }}
-                        className="bg-white/80 backdrop-blur-xl rounded-2xl p-5 shadow-lg group transition-all hover-lift"
-                        style={{ border: '1px solid rgba(45, 154, 138, 0.1)' }}
-                      >
-                        <div className="flex items-start gap-4">
-                          <div 
-                            className="w-12 h-12 rounded-xl flex items-center justify-center"
-                            style={{ background: typeStyle.bg, color: typeStyle.color }}
-                          >
-                            {getTypeIcon(material.type)}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p 
-                              className="font-medium truncate transition-colors"
-                              style={{ color: '#0d312c' }}
-                            >
-                              {material.title}
-                            </p>
-                            <p className="text-sm mt-1" style={{ color: '#247d70' }}>Week {material.week}</p>
-                            <div className="flex items-center justify-between mt-3">
-                              <span 
-                                className="text-xs font-medium px-2 py-1 rounded-lg"
-                                style={{ background: typeStyle.bg, color: typeStyle.color }}
-                              >
-                                {material.type}
-                              </span>
-                              <HiOutlineExternalLink 
-                                size={16} 
-                                className="transition-colors"
-                                style={{ color: '#66c3b7' }}
-                              />
-                            </div>
-                          </div>
-                        </div>
-                        <div 
-                          className="mt-4 pt-3 flex items-center justify-between text-xs"
-                          style={{ borderTop: '1px solid rgba(45, 154, 138, 0.1)', color: '#66c3b7' }}
-                        >
-                          <span>{material.uploadedBy}</span>
-                          <span>{material.uploadDate}</span>
-                        </div>
-                      </motion.a>
-                    );
-                  })}
-              </div>
-            </motion.div>
-          );
-        })}
       </div>
-
-      {filteredMaterials.length === 0 && (
-        <motion.div
-          variants={itemVariants}
-          className="flex flex-col items-center justify-center py-16"
-          style={{ color: '#66c3b7' }}
-        >
-          <HiOutlineDownload size={64} className="mb-4" />
-          <p className="text-xl font-medium">No materials found</p>
-          <p className="text-sm">Try adjusting your search or filter</p>
-        </motion.div>
+      
+      {/* Materials List */}
+      {filteredMaterials.length === 0 ? (
+        <div className="glass-card p-8 text-center">
+          <HiOutlineDocumentText size={48} className="mx-auto mb-4 text-seafoam-300" />
+          <p className="text-seafoam-500">No materials found</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {filteredMaterials.map((material, idx) => (
+            <motion.a
+              key={material.materialId || idx}
+              href={material.fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className="glass-card p-4 hover:shadow-lg transition-all hover:-translate-y-1"
+            >
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-xl bg-seafoam-100 flex items-center justify-center">
+                  <HiOutlineDocumentText size={20} className="text-seafoam-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-seafoam-900">{material.title}</h3>
+                  <p className="text-xs text-seafoam-500 mt-1">
+                    {material.courseName} • Week {material.week} • {material.type}
+                  </p>
+                  <p className="text-xs text-seafoam-400 mt-1">Uploaded by {material.uploadedBy}</p>
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
       )}
-    </motion.div>
+      
+      {/* Library Section - Free Resources */}
+      <div className="glass-card p-6 mt-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(27, 95, 86, 0.1)' }}>
+            <HiOutlineBookOpen size={20} style={{ color: '#1b5f56' }} />
+          </div>
+          <h2 className="text-xl font-semibold text-seafoam-900">📚 AUY Digital Library</h2>
+        </div>
+        <p className="text-sm text-seafoam-600 mb-4">Free educational resources for liberal arts and science students</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {libraryResources.map((resource, i) => (
+            <a
+              key={i}
+              href={resource.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="glass-card p-3 hover:shadow-md transition-all hover:-translate-y-0.5 text-seafoam-700 hover:text-seafoam-900"
+            >
+              <div className="font-medium text-sm">{resource.name}</div>
+              <div className="text-xs text-seafoam-400 mt-1">{resource.desc}</div>
+            </a>
+          ))}
+        </div>
+        <p className="text-xs text-seafoam-400 mt-4 text-center">All resources are free. Some may require a free account.</p>
+      </div>
+    </div>
   );
 }
