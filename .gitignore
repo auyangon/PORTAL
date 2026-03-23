@@ -24,3 +24,5 @@ Thumbs.db
 *.txt
 *.log
 *.dump
+.vercel
+.env*.local
