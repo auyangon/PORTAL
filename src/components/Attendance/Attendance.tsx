@@ -163,7 +163,7 @@ export function Attendance() {
                 </p>
               </div>
               <div className="w-full h-2 rounded-full overflow-hidden bg-seafoam-100">
-                <div className="h-full rounded-full transition-all" style={{ width: ${course.rate}%, background: course.rate >= 90 ? '#10b981' : course.rate >= 75 ? '#f59e0b' : '#ef4444' }} />
+                <div className="h-full rounded-full transition-all" style={{ width: course.rate + "%", background: course.rate >= 90 ? "#10b981" : course.rate >= 75 ? "#f59e0b" : "#ef4444" }} />
               </div>
               <div className="flex gap-3 text-xs mt-2">
                 <span className="text-green-600">✓ {course.present}</span>
@@ -177,3 +177,4 @@ export function Attendance() {
     </motion.div>
   );
 }
+
