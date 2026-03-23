@@ -10,7 +10,7 @@ export function Topbar({ title }: TopbarProps) {
   const { currentStudent, logout } = useStudent();
 
   return (
-    <div className="fixed top-0 right-0 left-72 h-16 bg-white/80 backdrop-blur-sm border-b z-10 flex items-center justify-between px-6">
+    <div className="fixed top-0 right-0 left-72 h-16 bg-white/80 backdrop-blur-sm border-b border-seafoam-100 z-10 flex items-center justify-between px-6">
       <h1 className="text-xl font-semibold text-seafoam-900">{title}</h1>
       <div className="flex items-center gap-4">
         <span className="text-sm text-seafoam-600">{currentStudent?.studentName}</span>
