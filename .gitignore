@@ -1,31 +1,7 @@
-﻿# Dependencies
-node_modules/
+﻿node_modules/
 dist/
 dist-ssr/
 *.local
-
-# Environment
 .env
-.env.local
-.env.production
-
-# Editor
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
 .DS_Store
-Thumbs.db
-
-# No text dumps
-*.txt
-*.log
-*.dump
-.vercel
-.env*.local
-
-# Local Netlify folder
-.netlify
+netlify.toml
