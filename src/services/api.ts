@@ -70,3 +70,4 @@ export const fetchRequestsByEmail = async (email: string) => {
 };
 
 export const REFRESH_INTERVAL = CONFIG.REFRESH_INTERVAL;
+

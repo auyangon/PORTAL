@@ -9,19 +9,19 @@ export function LoadingSpinner() {
           {/* Outer ring */}
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
             className="absolute inset-0 rounded-full border-4 border-seafoam-200 border-t-seafoam-600"
           />
           {/* Inner ring */}
           <motion.div
             animate={{ rotate: -360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}
             className="absolute inset-2 rounded-full border-4 border-seafoam-100 border-t-seafoam-400"
           />
           {/* Center dot */}
           <motion.div
             animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            transition={{ duration: 0.8, repeat: Infinity }}
             className="absolute inset-0 flex items-center justify-center"
           >
             <div className="w-4 h-4 rounded-full bg-seafoam-600" />
@@ -30,7 +30,7 @@ export function LoadingSpinner() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.2 }}
           className="mt-6 text-seafoam-700 font-medium"
         >
           Loading your dashboard...
@@ -38,10 +38,10 @@ export function LoadingSpinner() {
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.4 }}
           className="mt-2 text-sm text-seafoam-400"
         >
-          Fetching your courses, attendance, and quests
+          Fetching your courses and attendance
         </motion.p>
       </div>
     </div>

@@ -87,11 +87,10 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const fetchAllData = useCallback(async (email: string) => {
+    const fetchAllData = useCallback(async (email: string) => {
+    setIsLoading(true);
     try {
-      setState(prev => ({ ...prev, isLoading: true }));
-      
-      // Fetch all data in parallel for speed
+      // Fetch ALL data in parallel - much faster!
       const [
         student,
         courses,
@@ -116,7 +115,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         fetchRequestsByEmail(email),
       ]);
 
-      const newState = {
+      setState({
         currentStudent: student,
         courses,
         enrollments,
@@ -129,13 +128,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         requests,
         isLoading: false,
         error: null,
-      };
-
-      setState(newState);
-      
-      // Cache the data
-      dataCache.current[email] = newState;
-      
+      });
     } catch (error) {
       setState(prev => ({
         ...prev,
@@ -239,3 +232,4 @@ export function useStudent() {
   }
   return context;
 }
+
