@@ -9,7 +9,7 @@ import {
   HiOutlineClipboardCheck,
   HiOutlineLogout,
   HiOutlineAcademicCap
-} from 'react-icons/hi';
+} , HiOutlineLibrary } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 
 export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }) {
@@ -97,3 +97,4 @@ export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }) 
     </div>
   );
 }
+
