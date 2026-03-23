@@ -37,7 +37,7 @@ export function Attendance() {
         {courseData.map(c => (
           <div key={c.courseCode} className="mb-4">
             <div className="flex justify-between"><span>{c.courseName}</span><span>{c.rate}%</span></div>
-            <div className="w-full h-2 bg-gray-200 rounded-full mt-1"><div className="h-full rounded-full" style={{ width: ${c.rate}%, background: c.rate >= 90 ? '#10b981' : c.rate >= 75 ? '#f59e0b' : '#ef4444' }} /></div>
+            <div className="w-full h-2 bg-gray-200 rounded-full mt-1"><div className="h-full rounded-full" style={{ width: c.rate + "%", background: c.rate >= 90 ? "#10b981" : c.rate >= 75 ? "#f59e0b" : "#ef4444" }} /></div>
             <div className="flex gap-3 text-xs mt-1"><span className="text-green-600">✓ {c.present}</span><span className="text-amber-500">⏰ {c.late}</span><span className="text-red-500">✗ {c.absent}</span></div>
           </div>
         ))}
@@ -45,3 +45,4 @@ export function Attendance() {
     </div>
   );
 }
+
