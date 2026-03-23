@@ -47,7 +47,7 @@ export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: 
     : 'w-72 fixed left-0 top-0 glass';
 
   return (
-    <div className={h-full  flex flex-col}
+    <div className={`h-full ${containerClass} flex flex-col`}
          style={{ borderRight: '1px solid rgba(45, 154, 138, 0.1)' }}>
       <div className="p-6">
         <div className="flex items-center space-x-3">
@@ -70,7 +70,7 @@ export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: 
             <button
               key={item.tab}
               onClick={() => handleTabClick(item.tab)}
-              className={w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all }
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all ${isActive ? 'shadow-lg' : ''}`}
               style={{
                 background: isActive ? 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' : 'transparent',
                 color: isActive ? '#ffffff' : '#247d70'
@@ -106,4 +106,3 @@ export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: 
     </div>
   );
 }
-
