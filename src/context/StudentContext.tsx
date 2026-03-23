@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+﻿import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import type {
   Course,
   Schedule,
@@ -25,6 +25,7 @@ interface StudentContextType extends AppState {
   refreshData: () => Promise<void>;
   loginWithGoogle: (email: string) => Promise<boolean>;
   logout: () => void;
+  isLoading: boolean;
   getEnrolledCourses: () => Course[];
   getStudentSchedules: () => Schedule[];
   getCourseMaterials: (courseCode: string) => Material[];
@@ -37,6 +38,7 @@ const StudentContext = createContext<StudentContextType | null>(null);
 export function StudentProvider({ children }: { children: React.ReactNode }) {
   const [studentEmail, setStudentEmail] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [state, setState] = useState<AppState>({
     currentStudent: null,
     enrollments: [],
@@ -52,14 +54,25 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     error: null,
   });
 
-  // Google Login function
+  // Cache ref for faster subsequent loads
+  const dataCache = useRef<Record<string, any>>({});
+
   const loginWithGoogle = async (email: string): Promise<boolean> => {
+    setIsLoading(true);
     try {
-      setState(prev => ({ ...prev, isLoading: true }));
-      
+      // Check cache first
+      if (dataCache.current[email]) {
+        const cached = dataCache.current[email];
+        setState(prev => ({ ...prev, ...cached, isLoading: false }));
+        setStudentEmail(email);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        return true;
+      }
+
       const student = await fetchStudentByEmail(email);
       if (!student) {
-        setState(prev => ({ ...prev, isLoading: false }));
+        setIsLoading(false);
         return false;
       }
       
@@ -69,34 +82,16 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
       await fetchAllData(email);
       return true;
     } catch (error) {
-      setState(prev => ({ ...prev, isLoading: false, error: 'Login failed' }));
+      setIsLoading(false);
       return false;
     }
   };
 
-  const logout = () => {
-    setStudentEmail(null);
-    setIsAuthenticated(false);
-    setState({
-      currentStudent: null,
-      enrollments: [],
-      courses: [],
-      schedules: [],
-      materials: [],
-      announcements: [],
-      attendance: [],
-      quests: [],
-      studentQuests: [],
-      requests: [],
-      isLoading: false,
-      error: null,
-    });
-  };
-
   const fetchAllData = useCallback(async (email: string) => {
     try {
-      setState(prev => ({ ...prev, isLoading: true, error: null }));
-
+      setState(prev => ({ ...prev, isLoading: true }));
+      
+      // Fetch all data in parallel for speed
       const [
         student,
         courses,
@@ -121,7 +116,7 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         fetchRequestsByEmail(email),
       ]);
 
-      setState({
+      const newState = {
         currentStudent: student,
         courses,
         enrollments,
@@ -134,15 +129,43 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
         requests,
         isLoading: false,
         error: null,
-      });
+      };
+
+      setState(newState);
+      
+      // Cache the data
+      dataCache.current[email] = newState;
+      
     } catch (error) {
       setState(prev => ({
         ...prev,
         isLoading: false,
         error: error instanceof Error ? error.message : 'Failed to fetch data',
       }));
+    } finally {
+      setIsLoading(false);
     }
   }, []);
+
+  const logout = () => {
+    setStudentEmail(null);
+    setIsAuthenticated(false);
+    setIsLoading(false);
+    setState({
+      currentStudent: null,
+      enrollments: [],
+      courses: [],
+      schedules: [],
+      materials: [],
+      announcements: [],
+      attendance: [],
+      quests: [],
+      studentQuests: [],
+      requests: [],
+      isLoading: false,
+      error: null,
+    });
+  };
 
   useEffect(() => {
     if (studentEmail && isAuthenticated) {
@@ -182,11 +205,19 @@ export function StudentProvider({ children }: { children: React.ReactNode }) {
     return { quest, studentQuest };
   }, [state.quests, state.studentQuests]);
 
+  const refreshData = useCallback(() => {
+    if (studentEmail) {
+      return fetchAllData(studentEmail);
+    }
+    return Promise.resolve();
+  }, [studentEmail, fetchAllData]);
+
   const value: StudentContextType = {
     ...state,
+    isLoading,
     loginWithGoogle,
     logout,
-    refreshData: () => studentEmail ? fetchAllData(studentEmail) : Promise.resolve(),
+    refreshData,
     getEnrolledCourses,
     getStudentSchedules,
     getCourseMaterials,

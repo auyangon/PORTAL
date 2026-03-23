@@ -15,6 +15,7 @@ import { Attendance } from './components/Attendance/Attendance';
 import { Announcements } from './components/Announcements/Announcements';
 import { Requests } from './components/Requests/Requests';
 import { LoadingScreen } from './components/UI/LoadingScreen';
+import { LoadingSpinner } from './components/UI/LoadingSpinner';
 import { pageVariants } from './utils/animations';
 import type { NavigationPage } from './types';
 
@@ -95,8 +96,8 @@ function AppContent() {
     }
   };
 
-  if (showLoading) {
-    return <LoadingScreen />;
+  if (showLoading || isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -184,3 +185,4 @@ export default function App() {
     </StudentProvider>
   );
 }
+
