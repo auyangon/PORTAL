@@ -45,7 +45,7 @@ export default function Sidebar({ activeTab, setActiveTab, isMobile, onClose }: 
     : 'w-72 fixed left-0 top-0 glass';
 
   return (
-    <div className={`h-full ${containerClass} flex flex-col`}
+    <div className={`h-full ${containerClass} flex flex-col bg-white`}
          style={{ borderRight: '1px solid rgba(45, 154, 138, 0.1)' }}>
       <div className="p-6">
         <div className="flex items-center space-x-3">
