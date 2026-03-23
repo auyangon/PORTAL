@@ -5,7 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import { StudentProvider, useStudent } from './context/StudentContext';
 import { Login } from './components/Login';
 import Sidebar from './components/Layout/Sidebar';
-import { Topbar } from './components/Layout/Topbar';
+
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Courses } from './components/Courses/Courses';
 import { Quests } from './components/Quests/Quests';
@@ -139,14 +139,14 @@ function AppContent() {
       )}
       
       {/* Main Content */}
-      <div className={isMobile ? 'pt-16' : 'ml-72'}>
+      <div className={isMobile ? 'pt-4' : 'ml-72'}>
         <Topbar 
           title={PAGE_TITLES[currentPage]} 
           isMobile={isMobile}
           onMenuClick={() => setSidebarOpen(true)}
         />
         
-        <main className={isMobile ? 'px-4 pb-8 pt-4' : 'pt-28 px-8 pb-8'}>
+        <main className={isMobile ? 'px-4 pb-8 pt-4' : 'pt-8 px-8 pb-8'}>
           <AnimatePresence mode="wait">
             <motion.div
               key={currentPage}
@@ -185,5 +185,7 @@ export default function App() {
     </StudentProvider>
   );
 }
+
+
 
 
