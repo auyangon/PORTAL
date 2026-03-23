@@ -6,6 +6,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { StudentProvider, useStudent } from './context/StudentContext';
 import { Login } from './components/Login';
 import Sidebar from './components/Layout/Sidebar';
+import { Topbar } from './components/Layout/Topbar';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Courses } from './components/Courses/Courses';
 import { Quests } from './components/Quests/Quests';
@@ -78,7 +79,7 @@ function AppContent() {
 
   const overlayClass = isMobile && sidebarOpen ? 'fixed inset-0 bg-black bg-opacity-50 z-30' : '';
   const mainMargin = isMobile ? 'pt-16' : 'ml-72';
-  const mainPadding = isMobile ? 'px-4 pb-8 pt-4' : 'pt-8 px-8 pb-8';
+  const mainPadding = isMobile ? 'px-4 pb-8 pt-4' : 'pt-20 px-8 pb-8';
 
   return (
     <div className="min-h-screen">
@@ -126,3 +127,4 @@ export default function App() {
     </GoogleOAuthProvider>
   );
 }
+
