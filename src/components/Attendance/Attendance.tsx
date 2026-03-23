@@ -76,14 +76,7 @@ export function Attendance() {
           <h1 className="text-3xl font-semibold" style={{ color: '#0d312c' }}>Attendance</h1>
           <p className="text-sm mt-1" style={{ color: '#247d70' }}>Track your class attendance</p>
         </div>
-        <button
-          onClick={() => setShowQRScanner(!showQRScanner)}
-          className="px-5 py-3 rounded-xl text-white font-medium flex items-center gap-2"
-          style={{ background: 'linear-gradient(135deg, #1b5f56 0%, #247d70 100%)' }}
-        >
-          <HiOutlineQrcode size={20} />
-          {showQRScanner ? 'Close' : 'QR Check-in'}
-        </button>
+        
       </div>
 
       {/* QR Scanner Modal */}
@@ -177,4 +170,5 @@ export function Attendance() {
     </motion.div>
   );
 }
+
 
