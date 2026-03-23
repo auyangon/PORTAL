@@ -10,8 +10,7 @@ import {
   HiOutlineClipboardCheck,
   HiOutlineUser,
   HiOutlineLogout,
-  HiOutlineAcademicCap,
-  HiOutlineLibrary
+  HiOutlineAcademicCap
 } from 'react-icons/hi';
 import { useStudent } from '../../context/StudentContext';
 
